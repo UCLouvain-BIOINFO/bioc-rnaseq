@@ -1,0 +1,27 @@
+---
+source: Rmd
+title: Additional material
+teaching: 60
+exercises: 0
+---
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- How does high throughput sequencing work?
+- How does PCA work?
+- What are linear models?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- More details about several concepts that are used in this course
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## High throughput sequencing
+
+
+## Principal component analysis
+
+## Linear models
