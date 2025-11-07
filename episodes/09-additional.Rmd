@@ -24,4 +24,5 @@ exercises: 0
 
 ## Principal component analysis
 
+
 ## Linear models
