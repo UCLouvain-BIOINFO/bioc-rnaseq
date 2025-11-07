@@ -59,7 +59,7 @@ contact: 'charlotte.soneson@fmi.ch'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - 01-intro-to-rnaseq.Rmd
 - 02-setup.Rmd
 - 03-import-annotate.Rmd
@@ -68,19 +68,20 @@ episodes:
 - 06-extra-design.Rmd
 - 07-gene-set-analysis.Rmd
 - 08-next-steps.Rmd
+- 09-additional.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
 
-url: https://carpentries-incubator.github.io/bioc-rnaseq
+url: https://UCLouvain-BIOINFO.github.io/bioc-rnaseq

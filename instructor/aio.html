@@ -274,6 +274,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush10">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading10">
+        <a href="09-additional.html">9. Additional material</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -829,7 +841,7 @@ directory, create the four fundamental directories previously discussed
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <figure style="text-align: center"><img src="../fig/02_setup/folders_working_dir.png" alt="Your working directory should look like this" width="1221" class="figure mx-auto d-block"><figcaption>
 Your working directory should look like this
@@ -973,7 +985,7 @@ into the <code>data</code> folder in your working directory.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3854,7 +3866,7 @@ mean expression of a gene between male and female mice?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3942,7 +3954,7 @@ Day4, Day8) in the male spinal cord samples, and visualize it using
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7659,7 +7671,128 @@ quantified.</li>
 </div>
 </div>
 </div>
-</section></section>
+</section></section><section id="aio-09-additional"><p>Content from <a href="09-additional.html">Additional material</a></p>
+<hr>
+<p> Last updated on 2025-11-07 |
+
+        <a href="https://github.com/carpentries-incubator/bioc-rnaseq/edit/main/episodes/09-additional.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<p>Estimated time <i aria-hidden="true" data-feather="clock"></i> 60 minutes </p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right"> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How does high throughput sequencing work?</li>
+<li>How does PCA work?</li>
+<li>What are linear models?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>More details about several concepts that are used in this
+course</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="high-throughput-sequencing">High throughput sequencing<a class="anchor" aria-label="anchor" href="#high-throughput-sequencing"></a>
+</h2>
+<hr class="half-width"></section><section><h2 class="section-heading" id="rna-seq-library-preparation">RNA-seq library preparation<a class="anchor" aria-label="anchor" href="#rna-seq-library-preparation"></a>
+</h2>
+<hr class="half-width">
+<p>The starting point of a RNA-seq experiment is the cDNA library
+preparation. RNA is first isolated from cells and purified to remove
+ribosomal RNA which constitute the majority of total RNA. This can be
+done by extracting poly(A) RNA or by depleting rRNA. Purified RNA is
+then fragmented, reverse transcribed and adapters are ligated to both
+extremities to allow for amplification and sequencing.</p>
+<div class="section level3">
+<h3 id="stranded-versus-unstranded-libraries">Stranded versus unstranded libraries<a class="anchor" aria-label="anchor" href="#stranded-versus-unstranded-libraries"></a>
+</h3>
+<p>The library preparation presented above corresponds to an
+<strong>unstranded protocol</strong>.</p>
+<p>As both cDNA strands will be amplified for sequencing, about half of
+the reads will be sequenced from the first cDNA strand, and half of the
+reads will be sequenced from the second strand cDNA. But we won’t know
+which strand was sequenced! So we lose the information about the
+orientation of the transcript.</p>
+<p>This can be avoided by using a <strong>stranded protocol</strong>. In
+this case, dUTPs are added during the 2nd strand cDNA synthesis and the
+newly synthetized cDNA strand is degradated after the ligation step.
+This allows to infer the transcript orientation because only the first
+cDNA strand will be sequenced. Indeed, if the sequence of the read
+corresponds to the the sense strand of DNA, it means that the gene was
+originally transcribed in a sense orientation. On the contrary, if the
+read is complementary to the sense strand of DNA, it means that it was
+originally transcribed in antisense.</p>
+<p>Strand-specificity leads to lower number of ambiguous reads.</p>
+</div>
+</section><section><h2 class="section-heading" id="sequencing">Sequencing<a class="anchor" aria-label="anchor" href="#sequencing"></a>
+</h2>
+<hr class="half-width">
+<div class="section level3">
+<h3 id="se-vs-pe-sequencing">SE vs PE sequencing<a class="anchor" aria-label="anchor" href="#se-vs-pe-sequencing"></a>
+</h3>
+<p>Once the library is ready, molecules from the library are sequenced
+in a high throughput manner to obtain short sequences from one end
+(single-end sequencing) or both ends (pair-end sequencing). Single-end
+sequencing is cheaper, but Paired-end sequencing improves the ability to
+localise the fragment in the genome and resolve mapping close to repeat
+regions, resulting in less multimapping reads.</p>
+</div>
+<div class="section level3">
+<h3 id="cluster-amplification">cluster amplification<a class="anchor" aria-label="anchor" href="#cluster-amplification"></a>
+</h3>
+<p>The sequencing is done by a cluster amplification process.</p>
+<p>The library preparation is hybridized to a flow cell coated with
+immobilized oligonucleotides that serve as support to hold the DNA
+strands in place during sequencing. The templates are copied from the
+hybridized primers by 3’ extension using a high-fidelity DNA polymerase.
+The original templates are denatured, leaving the copies immobilized on
+the flow cell surface.</p>
+<p>Immobilized DNA template copies are then amplified by bridge
+amplification. The templates loop over to hybridize to adjacent
+oligonucleotides. DNA polymerase copies the templates from the
+hybridized oligonucleotides, forming dsDNA bridges, which are denatured
+to form two ssDNA strands. These two strands loop over and hybridize to
+adjacent oligonucleotides and are extended again to form two new dsDNA
+loops. The process is repeated on each template by cycles of
+denaturation and amplification to create millions of individual, dense
+clonal clusters containing ~2,000 molecules.</p>
+<p>Each cluster of dsDNA bridges is denatured, and the reverse strand is
+removed by specific base cleavage, leaving the forward DNA strand. The
+3’-ends of the DNA strands and flow cell-bound oligonucleotides are
+blocked to prevent interference with the sequencing reaction. The
+sequencing primer is hybridised to the Illumina adapter. Clusters are
+ready for sequencing.</p>
+<p>The sequencing process is done by synthesis. A polymerase adds a
+fluorescently tagged dNTP to the DNA strand (only one base is able to be
+added per round due to the fluorophore acting as a blocking group, but
+the blocking group is reversible). Each of the four bases has a unique
+fluorophore, and after each round, the machine records which base was
+added. The fluorophore is then washed away and the process is
+repeated.</p>
+<p>For a dynamic view of the cluster amplification process, watch the <a href="https://www.youtube.com/watch?v=HMyCqWhwB8E" class="external-link">Illumina
+video</a>.</p>
+</div>
+</section><section><h2 class="section-heading" id="principal-component-analysis-pca">Principal component analysis (PCA)<a class="anchor" aria-label="anchor" href="#principal-component-analysis-pca"></a>
+</h2>
+<hr class="half-width"></section><section><h2 class="section-heading" id="linear-models">Linear models<a class="anchor" aria-label="anchor" href="#linear-models"></a>
+</h2>
+<hr class="half-width"></section></section>
 </div>
     </main>
 </div>
@@ -7699,15 +7832,15 @@ quantified.</li>
     {
   "@context": "https://schema.org",
   "@type": "LearningResource",
-  "@id": "https://carpentries-incubator.github.io/bioc-rnaseq/instructor/aio.html",
+  "@id": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/aio.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/LearningResource/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, The Carpentries",
   "name": "All in One View",
   "creativeWorkStatus": "active",
-  "url": "https://carpentries-incubator.github.io/bioc-rnaseq/instructor/aio.html",
-  "identifier": "https://carpentries-incubator.github.io/bioc-rnaseq/instructor/aio.html",
+  "url": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/aio.html",
+  "identifier": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/aio.html",
   "dateCreated": "2020-09-15",
   "dateModified": "2025-11-07",
   "datePublished": "2025-11-07"
