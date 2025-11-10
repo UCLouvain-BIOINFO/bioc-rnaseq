@@ -1,15 +1,13 @@
 ---
+title: "Additional material"
 source: Rmd
-title: Additional material
 teaching: 60
 exercises: 0
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How does high throughput sequencing work?
-- How does PCA work?
-- What are linear models?
+- How does high throughput RNA-sequencing work?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -19,108 +17,12 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+```{r load-pkg}
+suppressPackageStartupMessages({
+    library(tidyverse)
+    library(patchwork)
+})
+```
+
 ## High throughput sequencing
 
-## RNA-seq library preparation
-
-The starting point of a RNA-seq experiment is the cDNA library
-preparation.  RNA is first isolated from cells and purified to remove
-ribosomal RNA which constitute the majority of total RNA. This can be
-done by extracting poly(A) RNA or by depleting rRNA. Purified RNA is then
-fragmented, reverse transcribed and adapters are ligated to both extremities
-to allow for amplification and sequencing.
-
-```{r, echo=FALSE, fig.align='center', out.width='60%'}
-#knitr::include_graphics("figs/Unstranded_lib_prep.png")
-```
-
-
-### Stranded versus unstranded libraries
-
-The library preparation presented above corresponds to an **unstranded protocol**.
-
-As both cDNA strands will be amplified for sequencing, about half of the
-reads will be sequenced from the first cDNA strand, and half of the reads will
-be sequenced from the second strand cDNA. But we won't know which strand was
-sequenced! So we lose the information about the orientation of the transcript.
-
-This can be avoided by using a **stranded protocol**.
-In this case, dUTPs are added during the 2nd strand cDNA synthesis and the
-newly synthetized cDNA strand is degradated after the ligation step.
-This allows to infer the transcript orientation because only the first cDNA strand
-will be sequenced. Indeed, if the sequence of the read corresponds to the
-the sense strand of DNA, it means that the gene was originally transcribed in a
-sense orientation. On the contrary, if the read is complementary to the sense
-strand of DNA, it means that it was originally transcribed in antisense.
-
-
-```{r, echo=FALSE, fig.align='center', out.width='100%'}
-#knitr::include_graphics("figs/stranded_vs_unstranded.png")
-```
-
-Strand-specificity leads to lower number of ambiguous reads.
-
-## Sequencing
-
-### SE vs PE sequencing
-
-Once the library is ready, molecules from the library are sequenced in
-a high throughput manner to obtain short sequences from one end
-(single-end sequencing) or both ends (pair-end sequencing). Single-end
-sequencing is cheaper, but Paired-end sequencing improves the ability
-to localise the fragment in the genome and resolve mapping close to
-repeat regions, resulting in less multimapping reads.
-
-```{r, echo = FALSE, fig.align ='center', out.width = '100%'}
-#knitr::include_graphics("figs/SE_vs_PE.png")
-```
-
-### cluster amplification
-
-The sequencing is done by a cluster amplification process.
-
-The library preparation is hybridized to a flow cell coated with
-immobilized oligonucleotides that serve as support to hold the DNA
-strands in place during sequencing. The templates are copied from the
-hybridized primers by 3’ extension using a high-fidelity DNA
-polymerase. The original templates are denatured, leaving the copies
-immobilized on the flow cell surface.
-
-Immobilized DNA template copies are then amplified by bridge
-amplification. The templates loop over to hybridize to adjacent
-oligonucleotides. DNA polymerase copies the templates from the
-hybridized oligonucleotides, forming dsDNA bridges, which are
-denatured to form two ssDNA strands. These two strands loop over and
-hybridize to adjacent oligonucleotides and are extended again to form
-two new dsDNA loops.  The process is repeated on each template by
-cycles of denaturation and amplification to create millions of
-individual, dense clonal clusters containing ~2,000 molecules.
-
-Each cluster of dsDNA bridges is denatured, and the reverse strand is
-removed by specific base cleavage, leaving the forward DNA strand. The
-3’-ends of the DNA strands and flow cell-bound oligonucleotides are
-blocked to prevent interference with the sequencing reaction. The
-sequencing primer is hybridised to the Illumina adapter. Clusters are
-ready for sequencing.
-
-
-```{r, echo = FALSE, fig.align ='center', out.width = '100%'}
-#knitr::include_graphics("figs/cluster_amplification.png")
-```
-
-The sequencing process is done by synthesis.  A polymerase adds a
-fluorescently tagged dNTP to the DNA strand (only one base is able to
-be added per round due to the fluorophore acting as a blocking group,
-but the blocking group is reversible). Each of the four bases has a
-unique fluorophore, and after each round, the machine records which
-base was added. The fluorophore is then washed away and the process is
-repeated.
-
-For a dynamic view of the cluster amplification process, watch the
-[Illumina video](https://www.youtube.com/watch?v=HMyCqWhwB8E).
-
-
-## Principal component analysis (PCA)
-
-
-## Linear models
