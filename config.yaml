@@ -69,6 +69,8 @@ episodes:
 - 07-gene-set-analysis.Rmd
 - 08-next-steps.Rmd
 - 09-additional.Rmd
+- 093-linear-models-FDR.Rmd
+- 095-pca.Rmd
 
 # Information for Learners
 learners:
