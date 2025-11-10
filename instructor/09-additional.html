@@ -86,11 +86,11 @@
   RNA-seq analysis with Bioconductor
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 92%" class="percentage">
-    92%
+<aside class="col-md-12 lesson-progress"><div style="width: 88%" class="percentage">
+    88%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 92%" aria-valuenow="92" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 88%" aria-valuenow="88" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -228,12 +228,26 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#high-throughput-sequencing">High throughput sequencing</a></li>
-<li><a href="#rna-seq-library-preparation">RNA-seq library preparation</a></li>
-<li><a href="#sequencing">Sequencing</a></li>
-<li><a href="#principal-component-analysis-pca">Principal component analysis (PCA)</a></li>
-<li><a href="#linear-models">Linear models</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="093-linear-models-FDR.html">10. Additional material: Linear models and FDR</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush12">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading12">
+        <a href="095-pca.html">11. Additional material: PCA</a>
+    </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
@@ -280,16 +294,16 @@
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/08-next-steps.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="../instructor/index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/093-linear-models-FDR.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/08-next-steps.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous: Next steps</a>
-        <a class="chapter-link float-end" href="../instructor/index.html" rel="next">Next... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/093-linear-models-FDR.html" rel="next">Next: Additional material:... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Additional material</h1>
-        <p> Last updated on 2025-11-07 |
+        <p> Last updated on 2025-11-10 |
 
         <a href="https://github.com/carpentries-incubator/bioc-rnaseq/edit/main/episodes/09-additional.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -310,9 +324,7 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How does high throughput sequencing work?</li>
-<li>How does PCA work?</li>
-<li>What are linear models?</li>
+<ul><li>How does high throughput RNA-sequencing work?</li>
 </ul></div>
 </div>
 </div>
@@ -327,89 +339,25 @@ course</li>
 </div>
 </div>
 </div>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">suppressPackageStartupMessages</span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
+<span>    <span class="kw">library</span><span class="op">(</span><span class="va">patchwork</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre>
+</div>
 <section><h2 class="section-heading" id="high-throughput-sequencing">High throughput sequencing<a class="anchor" aria-label="anchor" href="#high-throughput-sequencing"></a></h2>
-<hr class="half-width"></section><section><h2 class="section-heading" id="rna-seq-library-preparation">RNA-seq library preparation<a class="anchor" aria-label="anchor" href="#rna-seq-library-preparation"></a></h2>
-<hr class="half-width"><p>The starting point of a RNA-seq experiment is the cDNA library
-preparation. RNA is first isolated from cells and purified to remove
-ribosomal RNA which constitute the majority of total RNA. This can be
-done by extracting poly(A) RNA or by depleting rRNA. Purified RNA is
-then fragmented, reverse transcribed and adapters are ligated to both
-extremities to allow for amplification and sequencing.</p>
-<div class="section level3">
-<h3 id="stranded-versus-unstranded-libraries">Stranded versus unstranded libraries<a class="anchor" aria-label="anchor" href="#stranded-versus-unstranded-libraries"></a></h3>
-<p>The library preparation presented above corresponds to an
-<strong>unstranded protocol</strong>.</p>
-<p>As both cDNA strands will be amplified for sequencing, about half of
-the reads will be sequenced from the first cDNA strand, and half of the
-reads will be sequenced from the second strand cDNA. But we won’t know
-which strand was sequenced! So we lose the information about the
-orientation of the transcript.</p>
-<p>This can be avoided by using a <strong>stranded protocol</strong>. In
-this case, dUTPs are added during the 2nd strand cDNA synthesis and the
-newly synthetized cDNA strand is degradated after the ligation step.
-This allows to infer the transcript orientation because only the first
-cDNA strand will be sequenced. Indeed, if the sequence of the read
-corresponds to the the sense strand of DNA, it means that the gene was
-originally transcribed in a sense orientation. On the contrary, if the
-read is complementary to the sense strand of DNA, it means that it was
-originally transcribed in antisense.</p>
-<p>Strand-specificity leads to lower number of ambiguous reads.</p>
-</div>
-</section><section><h2 class="section-heading" id="sequencing">Sequencing<a class="anchor" aria-label="anchor" href="#sequencing"></a></h2>
-<hr class="half-width"><div class="section level3">
-<h3 id="se-vs-pe-sequencing">SE vs PE sequencing<a class="anchor" aria-label="anchor" href="#se-vs-pe-sequencing"></a></h3>
-<p>Once the library is ready, molecules from the library are sequenced
-in a high throughput manner to obtain short sequences from one end
-(single-end sequencing) or both ends (pair-end sequencing). Single-end
-sequencing is cheaper, but Paired-end sequencing improves the ability to
-localise the fragment in the genome and resolve mapping close to repeat
-regions, resulting in less multimapping reads.</p>
-</div>
-<div class="section level3">
-<h3 id="cluster-amplification">cluster amplification<a class="anchor" aria-label="anchor" href="#cluster-amplification"></a></h3>
-<p>The sequencing is done by a cluster amplification process.</p>
-<p>The library preparation is hybridized to a flow cell coated with
-immobilized oligonucleotides that serve as support to hold the DNA
-strands in place during sequencing. The templates are copied from the
-hybridized primers by 3’ extension using a high-fidelity DNA polymerase.
-The original templates are denatured, leaving the copies immobilized on
-the flow cell surface.</p>
-<p>Immobilized DNA template copies are then amplified by bridge
-amplification. The templates loop over to hybridize to adjacent
-oligonucleotides. DNA polymerase copies the templates from the
-hybridized oligonucleotides, forming dsDNA bridges, which are denatured
-to form two ssDNA strands. These two strands loop over and hybridize to
-adjacent oligonucleotides and are extended again to form two new dsDNA
-loops. The process is repeated on each template by cycles of
-denaturation and amplification to create millions of individual, dense
-clonal clusters containing ~2,000 molecules.</p>
-<p>Each cluster of dsDNA bridges is denatured, and the reverse strand is
-removed by specific base cleavage, leaving the forward DNA strand. The
-3’-ends of the DNA strands and flow cell-bound oligonucleotides are
-blocked to prevent interference with the sequencing reaction. The
-sequencing primer is hybridised to the Illumina adapter. Clusters are
-ready for sequencing.</p>
-<p>The sequencing process is done by synthesis. A polymerase adds a
-fluorescently tagged dNTP to the DNA strand (only one base is able to be
-added per round due to the fluorophore acting as a blocking group, but
-the blocking group is reversible). Each of the four bases has a unique
-fluorophore, and after each round, the machine records which base was
-added. The fluorophore is then washed away and the process is
-repeated.</p>
-<p>For a dynamic view of the cluster amplification process, watch the <a href="https://www.youtube.com/watch?v=HMyCqWhwB8E" class="external-link">Illumina
-video</a>.</p>
-</div>
-</section><section><h2 class="section-heading" id="principal-component-analysis-pca">Principal component analysis (PCA)<a class="anchor" aria-label="anchor" href="#principal-component-analysis-pca"></a></h2>
-<hr class="half-width"></section><section><h2 class="section-heading" id="linear-models">Linear models<a class="anchor" aria-label="anchor" href="#linear-models"></a></h2>
 <hr class="half-width"></section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/08-next-steps.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="../instructor/index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/093-linear-models-FDR.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="../instructor/08-next-steps.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous: Next steps</a>
-        <a class="chapter-link float-end" href="../instructor/index.html" rel="next">Next... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/093-linear-models-FDR.html" rel="next">Next: Additional material:... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div> <!-- / div.primary-content.col-xs-12 -->
 <!-- END:   inst/pkgdown/templates/content-instructor.html-->
@@ -455,8 +403,8 @@ video</a>.</p>
   "url": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/09-additional.html",
   "identifier": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/09-additional.html",
   "dateCreated": "2020-09-15",
-  "dateModified": "2025-11-07",
-  "datePublished": "2025-11-07"
+  "dateModified": "2025-11-10",
+  "datePublished": "2025-11-10"
 }
 
   </script><script>
