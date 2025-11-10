@@ -1,0 +1,538 @@
+---
+title: "Additional material: PCA"
+source: Rmd
+teaching: 20
+exercises: 0
+---
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- How does PCA work?
+- What can PCA reveal from RNA-seq data?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- More details about several concepts that are used in this course
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+```{r load-pkg, include=FALSE}
+suppressPackageStartupMessages({
+    library(tidyverse)
+    library(patchwork)
+})
+```
+
+
+## Introduction to PCA
+
+Principal Component Analysis (PCA) is a dimensionality reduction method, whose 
+aim is to transform a high-dimensional data into data of lesser dimensions while 
+minimising the loss of information.
+
+We are going to use a small dataset to illustrate some important concepts 
+related to PCA. This dataset represents the measurement of genes *x* and *y* in 
+20 samples. We will be using the scaled and centered version of this dataset.
+
+```{r xyplot, echo=FALSE, fig.cap="Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples", fig.height=5, fig.width=11, message=FALSE, warning=FALSE}
+xy0 <- read_tsv("data/xy0.tsv")
+xy <- scale(xy0, center = TRUE, scale = TRUE)
+xy <- as_tibble(xy)
+## original data
+p0 <- ggplot(xy0, aes(x = gene_x, y = gene_y)) +
+  geom_point(shape = 19, size = 2) +
+  theme(panel.grid = element_blank(),
+        aspect.ratio = 1,
+        axis.title = element_text(size = 14)) 
+
+## scaled data
+p <- ggplot(xy, aes(x = gene_x, y = gene_y)) +
+  geom_point(shape = 19, size = 2) +
+  theme(panel.grid = element_blank(),
+        aspect.ratio = 1,
+        axis.title = element_text(size = 14)) 
+  
+p0 + p +
+  geom_vline(xintercept = 0, color = "gray40")+
+  geom_hline(yintercept = 0, color = "gray40") 
+```
+
+
+### Lower-dimensional projections
+
+The goal of dimensionality reduction is to reduce the number of
+dimensions in a way that the new data remains useful. One way to
+reduce a 2-dimensional data is by projecting the data onto a
+line. Below, we project our data on the x and y axes. These are
+called **linear projections**.
+
+```{r linproj, echo = FALSE, fig.cap = "Projection of the data on the x (left) and y (right) axes.", fig.heigth = 5, fig.width = 11}
+## projection on y = 0
+py <- p +
+  geom_point(aes(y = 0), colour = "red") +
+  geom_segment(aes(xend = gene_x, yend = 0), linetype = "dotted") +
+  geom_vline(xintercept = 0, color = "gray40")+
+  geom_hline(yintercept = 0, color = "gray40")
+
+## projection on x = 0
+px <- p +
+  geom_point(aes(x = 0), colour = "red") +
+  geom_segment(aes(yend = gene_y, xend = 0), linetype = "dotted") +
+  geom_vline(xintercept = 0, color = "gray40")+
+  geom_hline(yintercept = 0, color = "gray40") 
+
+## projections on x = 0 and y = 0
+py + px
+```
+
+In general, and in particular in the projections above, we lose
+information when reducing the number of dimensions (above, from 2
+(plane) to 1 (line)). In the first example above (left), we lose all
+the measurements of gene *y*. In the second example (right), we lose
+all the measurements of gene *x*.
+
+**=> The goal of dimensionality reduction is to limit this loss.**
+
+We know already about **linear regression**. Below, we use the `lm`
+function to regress *y* onto *x* (left) and *x* onto *y*
+(right). These regression lines give us an approximate linear
+relationship between the expression of genes *x* and *y*. The
+relationship differs depending on the gene we choose to be the
+predictor or the response.
+
+
+```{r linreg, echo = FALSE, fig.cap = "Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange).", fig.width = 5, fig.width = 11}
+reg1 <- lm(gene_y ~ gene_x, data = xy)
+a1 <- reg1$coefficients[1] # intercept
+b1 <- reg1$coefficients[2] # slope
+pline1 <- p +
+    geom_abline(intercept = a1, slope = b1, col = "blue", lwd = 1.5) +
+    geom_segment(aes(xend = gene_x, yend = reg1$fitted),
+                 colour = "red",
+                 arrow = arrow(length = unit(0.15, "cm"))) +
+  theme(plot.title = element_text(size = 12, color = "red")) +
+  ggtitle("lm(GeneY ~ GeneX) => Projection on y-axis") 
+
+reg2 <- lm(gene_x ~ gene_y, data = xy)
+a2 <- reg2$coefficients[1] # intercept
+b2 <- reg2$coefficients[2] # slope
+pline2 <- p +
+    geom_abline(intercept = -a2/b2, slope = 1/b2,
+                col = "blue", lwd = 1.5) +
+    geom_segment(aes(xend = reg2$fitted, yend = gene_y),
+                 colour = "darkcyan",
+                 arrow = arrow(length = unit(0.15, "cm"))) +
+  theme(plot.title = element_text(size = 12, color = "darkcyan")) +
+  ggtitle("lm(GeneX ~ GeneY) => Projection on x-axis") 
+
+
+pline1 + pline2
+```
+
+We now want a line that minimises distances in both directions, as
+shown below. This line, called **first principal component (PC1)**, 
+minimises the sum of squares of the orthogonal projections.
+It is also the one that maximises the variance of the projections along itself.
+
+The **second principal component (PC2)** is then chosen to be orthogonal to the
+first one. In this case, there is only one possibility.
+
+```{r pxaex, echo = FALSE, fig.height = 5.6, fig.width = 11.5}
+svda <- svd(xy)
+pc <- as.matrix(xy) %*% svda$v[, 1] %*% t(svda$v[, 1])
+pc_y <- as.matrix(xy) %*% svda$v[, 2] %*% t(svda$v[, 2])
+
+bp <- svda$v[2, 1] / svda$v[1, 1]
+ap <- mean(pc[, 2]) - bp * mean(pc[, 1])
+pline3 <- p +
+  geom_segment(xend = pc[, 1], yend = pc[, 2], linetype = "dotted") +
+  geom_abline(intercept = ap, slope = bp,
+                col = "purple", lwd = 1.5) 
+
+pline4 <- pline3 + 
+  geom_abline(slope = -1, col = "purple", lwd = 1.5) +
+  geom_segment(xend = pc[, 2], yend = pc[, 2], linetype = "dotted") +
+  geom_segment(xend = pc_y[, 1], yend = pc_y[, 2], linetype = "dotted") 
+
+
+pline3 + annotate("text", x = 1.4, y = 1.2, 
+                  label = "PC1", color = "purple", size = 7, angle  = 45) +
+  pline4 + annotate("text", x = 1.4, y = 1.2, 
+                  label = "PC1", color = "purple", size = 7, angle  = 45) + 
+  annotate("text", x = -1.5, y = 1.2, 
+                  label = "PC2", color = "purple", size = 7, angle  = 45) 
+#pca
+```
+
+After rotating the plot such that PC1 becomes the horizontal axis, we obtain the PCA plot:
+
+
+```{r pxaex2, echo = FALSE, fig.height = 5.8, fig.width = 11}
+ppdf <- tibble(PC1n = svda$u[, 1] * svda$d[1],
+               PC2n = svda$u[, 2] * svda$d[2])
+
+pca <- ggplot(ppdf, aes(x = PC1n, y = PC2n)) +
+  geom_point(shape = 19, size = 2) +
+  xlab("PC1") + ylab("PC2") +
+  geom_segment(aes(xend = PC1n, yend = 0), linetype = "dotted") +
+  geom_hline(yintercept = 0, color = "purple",lwd = 1.5) +
+  geom_point(aes(x = PC1n, y = 0), color = "red") +
+  theme(panel.grid = element_blank(),
+        aspect.ratio = 1) 
+
+
+pca2 <- ggplot(ppdf, aes(x = PC1n, y = PC2n)) +
+  geom_point(shape = 19, size = 2) +
+  xlab("PC1 ") + ylab("PC2") +
+  geom_segment(aes(xend = PC1n, yend = 0), linetype = "dotted") +
+  geom_segment(aes(x = PC1n, xend = 0, y = PC2n, yend = PC2n), linetype = "dotted") +
+  geom_hline(yintercept = 0, color = "purple", lwd = 1) +
+  geom_vline(xintercept = 0, color = "purple", lwd = 1)+
+  geom_point(aes(x = PC1n, y = 0), color = "red") +
+  geom_point(aes(x = 0, y = PC2n), color = "red") +
+  theme(panel.grid = element_blank(),
+        aspect.ratio = 1) 
+
+pca3 <- ggplot(ppdf, aes(x = PC1n, y = PC2n)) +
+  geom_point(shape = 19, size = 2) +
+  xlab("PC1") + ylab("PC2") +
+  #geom_segment(aes(x = PC1n, xend = 0, y = PC2n, yend = PC2n), linetype = "dotted") +
+  geom_hline(yintercept = 0, color = "purple", lwd = 1) +
+  geom_vline(xintercept = 0, color = "purple", lwd = 1)+
+  #geom_point(aes(x = PC1n, y = 0), color = "red") +
+  #geom_point(aes(x = 0, y = PC2n), color = "red") +
+  theme(panel.grid = element_blank(),
+        aspect.ratio = 1,
+        axis.title = element_text(color = "purple", size = 16, face = "bold")) 
+
+#pca2 + 
+pca3
+```
+
+```{r prcomp, echo = FALSE}
+.pca <- prcomp(xy)
+var <- .pca$sdev^2
+pve <- var/sum(var)
+```
+
+In this example the variance along the PCs are
+`r round(var[1], 2)` and `r round(var[2], 2)` respectively. The first one explains
+`r round(pve[1] * 100, 1)`% or that variance, and the second one merely
+`r round(pve[2] * 100, 1)`%. 
+
+To account for these differences in variation along the different PCs,
+it is better to represent a PCA plot as a rectangle, using an aspect
+ratio that is illustrative of the respective variances.
+
+```{r pxaex3, echo = FALSE, fig.cap = "Final principal component analysis of the data.", fig.height = 4, fig.width = 10}
+pca_final <- ggplot(ppdf, aes(x = PC1n, y = PC2n)) +
+  geom_point(shape = 19, size = 2) +
+  xlab(paste0("PC1 (", round(pve[1] * 100, 1), "% variance)")) + 
+  ylab(paste0("PC2 (", round(pve[2] * 100, 1), "% variance)")) + 
+  theme(panel.grid = element_blank(),
+        aspect.ratio = .2) 
+  
+pca_final
+```
+
+
+### Starting from a (slightly) higher number of dimensions
+
+Let's know use another toy dataset, a small table called `tiny_dataset` that gives the 
+expression values of 5 genes in two groups of cells (control and treated cells).
+Since we have the expression values of 5 genes (5 dimensions), we cannot represent
+them on a single plot.
+
+```{r new_data, echo=FALSE}
+set.seed(123)
+tiny_dataset <- data.frame(GeneA = round(c(rnorm(10, 30, .5)))) %>%             
+  mutate(GeneB = round(c(rnorm(5, 5, 1), rnorm(5, 1000, 100)))) %>%
+  mutate(GeneC = round(c(rnorm(5, 80, 5), rnorm(5, 1000, 10)))) %>%
+  mutate(GeneD = round(rnorm(10, 500, 10))) %>% 
+  mutate(GeneE = round(c(rnorm(5, 800, 5), rnorm(5, 50, 1))))
+rownames(tiny_dataset) <- c(paste0("CTL_", 1:5), paste0("Treated_", 1:5))
+```
+
+```{r}
+tiny_dataset
+```
+
+
+This table is not too big, so by quickly inspecting it by eye, we can see that 
+the treatment seems to have a strong impact on the expression of GeneB, GeneC, 
+and GeneE but had little or no effect on genes GeneA and GeneD.
+
+
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge: 
+
+What do you think a PCA based on this small dataset should look like? 
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+Now let's use the `prcomp()` function to do a PCA on this dataset.
+The output of prcomp is an object of class prcomp.
+
+```{r pca2}
+pca <- prcomp(tiny_dataset, center = TRUE, scale = TRUE)
+str(pca)
+```
+
+
+```{r include=FALSE}
+var <- pca$sdev^2
+pve <- var/sum(var)
+pve
+```
+
+
+
+#### Variance explained by each component
+
+A summary of prcomp output shows that 
+
+- PC1 was able to capture about `r round(pve[1] * 100)` % of the total variability in the data,
+- PC2 was able to capture about `r round(pve[2] * 100)` % of the total variability in the data.
+- Together, PC1 and PC2 retained `r round(pve[1] * 100 + pve[2] * 100, 2)` % of the total variability in the data
+
+```{r}
+summary(pca)
+```
+
+These values can also be computed from the `sdev` slot of the prcomp output that 
+contains the standard deviations along the respective PCs. 
+From these, we can compute the variances and the percentages of variance explained 
+by the individual PCs.
+
+
+```{r echo=TRUE}
+var <- pca$sdev^2
+pve <- var/sum(var)
+pve
+```
+
+
+#### PCA's coordinates
+
+The `x` element of the prcomp output is a table that gives the sample 
+coordinates in the new space of components. 
+
+```{r}
+pca$x
+```
+
+
+These values can be used to draw the PCA plot
+
+```{r echo=TRUE, fig.height=4, fig.width=10}
+as_tibble(pca$x, rownames = "sample") %>% 
+  mutate(group = sub(pattern = "_.*", x = sample, replacement = '')) %>% 
+  ggplot(aes(x = PC1, y = PC2, color = group)) +
+  geom_point(size = 3) +
+  theme(aspect.ratio = .4) +
+  xlab(paste0("PC1: ", round(pve[1] * 100), " % of variance")) +
+  ylab(paste0("PC2: ", round(pve[2] * 100), " % of variance")) 
+```
+
+This PCA is a representation in 2 dimensions (PC1 and PC2) of our 5-dimensions 
+dataset. 
+
+The new axes (PC1 and PC2) captured `r round(pve[1] * 100 + pve[2] * 100, 2)` % 
+of the total variability of the data).
+
+This PCA plot shows that the samples cluster into two distinct groups along PC1.
+This separation indicates that the “CTL” and “Treated” samples have different 
+overall expression profiles.
+
+
+#### The Loadings
+
+Principal components provide a new coordinate system. They are linear combinations 
+of the variables that were originally measured. 
+
+PC1 in the previous example is a linear combination of the 5 genes:
+
+$$ PC1 = c_{1}.Gene_{A} + c_{2}.Gene_{B} + c_{3}.Gene_{C} + c_{4}.Gene_{D} + c_{5}.Gene_{E}$$
+
+The coefficients $c_1$, $c_2$, $c_3$, $c_4$, and $c_5$, also called **loadings**, 
+represent the weight of each gene in PC1.
+
+Loadings are stored in the `rotation` slot of the prcomp output. Genes with the 
+largest absolute PC1 loadings are the ones that contribute most to that component 
+(GeneB, GeneC and GeneE in this case). 
+
+```{r}
+pca$rotation
+```
+
+
+Loadings can be visualised on a **biplot**, where the arrows show the contribution 
+of each gene to the principal components.
+
+
+```{r echo=FALSE, fig.height=4, fig.width=10}
+scale_factor <- 1
+
+# Scale loadings by each PC sd (ex: PC1_score* PC1_sd)
+# => Arrow representing real effect of genes on PCA scores
+loadings <- sweep(pca$rotation, 2, pca$sdev, FUN = "*")
+loadings <- pca$rotation
+
+
+as_tibble(pca$x, rownames = "sample") %>% 
+  mutate(group = sub(pattern = "_.*", x = sample, replacement = '')) %>% 
+  ggplot(aes(x = PC1, y = PC2, color = group)) +
+  geom_point(size = 2) +
+  xlab(paste0("PC1 (", round(pve[1], 2)*100, "% var)")) +
+  ylab(paste0("PC2 (", round(pve[2], 2)*100, "% var)")) +
+  geom_vline(xintercept = 0)+
+  geom_hline(yintercept = 0) +
+   theme(aspect.ratio = 0.4) +
+  geom_segment(data = as_tibble(loadings),
+               aes(x=0, y=0, xend = PC1*scale_factor, yend = PC2*scale_factor),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "blue") +
+    geom_text(data = as_tibble(loadings, rownames = "Gene"), 
+              aes(x = PC1*scale_factor, y = PC2*scale_factor, label = Gene), 
+              hjust = c(.5, 1.1, 1.1, 0.5, -0.2), vjust = c(1, 1, 0.5, 1, 0.5), color = "blue")
+```
+
+This biplot shows that:
+
+- PC1 is mostly driven by GeneB, GeneC and GeneE. 
+
+- GeneB and GeneC are pointing in the same direction, which means that they 
+are highly correlated. They are in contrast pointing in the opposite direction 
+to GeneE indicating an inverse correlation.
+
+- The GeneA arrow is almost perpendicular to GeneB, GeneC and GeneE arrows,
+indicating that GeneA is not correlated to the 3 other genes.
+
+- PC2 is mainly driven by GeneA and GeneD (GeneB, GeneC and 
+GeneE only have a low contibution).
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge: Compare the PCA with the original dataset. 
+
+Are principal components effectively representing the main patterns and structure 
+of the dataset?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+## What can PCA reveal from RNA-seq data?
+
+In real RNA-seq datasets, the data usually consists of tens of thousands of 
+dimensions (genes), which are impossible to explore by eye. In this context, 
+PCA is extremely useful, as it summarizes the data into a smaller number of 
+dimensions, making it easier to explore.
+
+What insights can PCA provide for RNA-seq data?
+
+- Which samples are similar or distinct to each other?
+
+- What are the main sources of variability in the data?
+
+- Does the PCA fit to the expectation from the experimental design?
+
+- Are there any batch effects or other technical confounders that should be 
+included in linear model?
+
+- Are they any outliers which may need to be explored further?
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge: Interprete the following PCAs. 
+
+Here are a few examples of PCAs corresponding to different experimental designs. 
+How would you interprete them and what impact would they have on the analysis?
+
+
+```{r echo=FALSE, fig.height=4, fig.width=10}
+pca <- tibble(experience = c(rep(paste0("exp", 1:3), 2)),
+               group = c(rep("CTL", 3), rep("KD", 3)),
+               PC1 = c(-5, -1, 4, -4.6, -0.5, 5),
+               PC2 = c(4, -3, 2, 4.8, -2.5, 2.6))
+pca %>% 
+  ggplot(aes(x = PC1, y = PC2, color = group, shape = experience)) +
+  geom_point(size = 3) +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        aspect.ratio = 0.4)
+```
+
+
+```{r echo=FALSE, fig.height=4, fig.width=10}
+set.seed(123)
+pca <- tibble(batch = c(rep("batch1", 6), rep("batch2", 6), rep("batch3", 6)),
+               group = rep(c(rep("CTL", 3), rep("Treated", 3)), 3),
+               PC1 = c(rnorm(3, -4, .3), rnorm(3, -4, .3), 
+                       rnorm(3, -2, .2), rnorm(3, -2, .2),
+                       rnorm(3, 4, .3), rnorm(3, 4.1, .1)),
+               PC2 = c(rnorm(3, 4, .2), rnorm(3, 3, .2), 
+                       rnorm(3, -2, .3), rnorm(3, -4, .3),
+                       rnorm(3, 5, .1), rnorm(3, 3.5, .2)))
+
+pca %>% 
+  ggplot(aes(x = PC1, y = PC2, color = group, shape = batch)) +
+  geom_point(size = 3)+
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        aspect.ratio = 0.4)
+```
+
+
+```{r echo=FALSE, fig.height=4, fig.width=10}
+set.seed(123)
+pca <- tibble(Cell = c(rep("cellA", 6), rep("cellB", 6)),
+               Condition = rep(c(rep("Acid", 3), rep("Neutral", 3)), 2),
+               PC1 = c(rnorm(3, -4, .3), rnorm(3, -4.2, .3), 
+                       rnorm(3, 4, .3), rnorm(3, 4.1, .1)),
+               PC2 = c(rnorm(3, 6, .2), rnorm(3, 4, .2),
+                       rnorm(6, 5, .2)))
+
+pca %>% 
+  ggplot(aes(x = PC1, y = PC2, color = Condition, shape = Cell)) +
+  geom_point(size = 3)+
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        aspect.ratio = 0.4)
+```
+
+
+
+```{r echo=FALSE, fig.height=4, fig.width=10}
+set.seed(123)
+pca <- tibble(Group = c(rep("Control", 6), rep("Treated", 6)),
+               PC1 = c(rnorm(6, -4, 0.7),  rnorm(6, 4, .7)),
+               PC2 = c(rnorm(6, -2, 1), rnorm(6, 2, 1)))
+
+pca$PC1[1] <- -pca$PC1[1] 
+
+pca %>% 
+  ggplot(aes(x = PC1, y = PC2, color = Group)) +
+  geom_point(size = 3)+
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        aspect.ratio = 0.4)
+```
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
