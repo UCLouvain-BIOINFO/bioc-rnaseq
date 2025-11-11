@@ -16,7 +16,7 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Explain what RNA-seq is.
-- Provide an overview of the procedure to go from the raw data to the 
+- Provide an overview of the procedure to go from the raw data to the
 read count matrix that will be used for downstream analysis.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -159,12 +159,13 @@ Each entry in a fastq file consists of 4 lines:
 knitr::include_graphics("fig/phred_score.png")
 ```
 
-`r msmbstyle::question_begin()`
+
+:::::::::::::::::::::::::::::::::::::::: questions
 
 What do you think of the quality of the last sequence presented in the
 fastq file above?
 
-`r msmbstyle::question_end()`
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Processing pipeline
 
@@ -202,7 +203,7 @@ $ fastqc SampleName.fastq
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-### Discussion: 
+### Discussion:
 
 Try to interpret the different plots of this
 [fastQC report](./OD01_10_1_fastqc.html)
@@ -210,7 +211,7 @@ from a real RNA-seq fastq file.
 
 Another report corresponding to [bad
 quality](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/bad_sequence_fastqc.html)
-data can be used as a point of comparison. 
+data can be used as a point of comparison.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -248,7 +249,7 @@ $ java -jar trimmomatic.jar \
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-### Discussion: 
+### Discussion:
 
 How could you check that the trimming performed well?
 
@@ -462,18 +463,18 @@ The featurecounts output file will give us the raw counts of each gene in that s
 This is how the first lines of featurecounts output could look like:
 
 ```{r}
-x <- structure(list(Geneid = c("ENSG00000223972", "ENSG00000227232", 
+x <- structure(list(Geneid = c("ENSG00000223972", "ENSG00000227232",
 "ENSG00000278267", "ENSG00000243485", "ENSG00000284332", "ENSG00000237613"
-), Chr = c("1;1;1;1;1;1;1;1;1", "1;1;1;1;1;1;1;1;1;1;1", "1", 
-"1;1;1;1;1", "1", "1;1;1;1;1"), Start = c("11869;12010;12179;12613;12613;12975;13221;13221;13453", 
-"14404;15005;15796;16607;16858;17233;17606;17915;18268;24738;29534", 
+), Chr = c("1;1;1;1;1;1;1;1;1", "1;1;1;1;1;1;1;1;1;1;1", "1",
+"1;1;1;1;1", "1", "1;1;1;1;1"), Start = c("11869;12010;12179;12613;12613;12975;13221;13221;13453",
+"14404;15005;15796;16607;16858;17233;17606;17915;18268;24738;29534",
 "17369", "29554;30267;30564;30976;30976", "30366", "34554;35245;35277;35721;35721"
-), End = c("12227;12057;12227;12721;12697;13052;13374;14409;13670", 
-"14501;15038;15947;16765;17055;17368;17742;18061;18366;24891;29570", 
+), End = c("12227;12057;12227;12721;12697;13052;13374;14409;13670",
+"14501;15038;15947;16765;17055;17368;17742;18061;18366;24891;29570",
 "17436", "30039;30667;30667;31109;31097", "30503", "35174;35481;35481;36073;36081"
-), Strand = c("+;+;+;+;+;+;+;+;+", "-;-;-;-;-;-;-;-;-;-;-", "-", 
-"+;+;+;+;+", "+", "-;-;-;-;-"), Length = c(1735, 1351, 68, 1021, 
-138, 1219), sample.bam = c(0, 14, 8, 0, 0, 0)), row.names = c(NA, 
+), Strand = c("+;+;+;+;+;+;+;+;+", "-;-;-;-;-;-;-;-;-;-;-", "-",
+"+;+;+;+;+", "+", "-;-;-;-;-"), Length = c(1735, 1351, 68, 1021,
+138, 1219), sample.bam = c(0, 14, 8, 0, 0, 0)), row.names = c(NA,
 -6L), class = c("tbl_df", "tbl", "data.frame"))
 ```
 
@@ -490,11 +491,7 @@ and each line represents a gene. This count matrix will be the starting point of
 differential expression analysis.
 
 ```{r}
-counts <- read.csv("data/GSE96870_counts_cerebellum.csv", 
+counts <- read.csv("data/GSE96870_counts_cerebellum.csv",
                    row.names = 1)
 head(counts)
 ```
-
-
-
-
