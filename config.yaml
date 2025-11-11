@@ -68,8 +68,8 @@ episodes:
 - 06-extra-design.Rmd
 - 07-gene-set-analysis.Rmd
 - 08-next-steps.Rmd
-- 09-additionnal-material-LM-FDR.Rmd
-- 095-pca.Rmd
+- 10-additionnal-material-LM-FDR.Rmd
+- 11-Additional-material-PCA.Rmd
 
 # Information for Learners
 learners:
