@@ -19,6 +19,10 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+Parts of this chapter are based on the course [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/)
+Omics data analysis (WSBIM2122).
+
+
 ```{r load-pkg, include=FALSE}
 suppressPackageStartupMessages({
     library(tidyverse)
