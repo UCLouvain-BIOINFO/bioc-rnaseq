@@ -68,8 +68,7 @@ episodes:
 - 06-extra-design.Rmd
 - 07-gene-set-analysis.Rmd
 - 08-next-steps.Rmd
-- 09-additional.Rmd
-- 093-linear-models-FDR.Rmd
+- 09-additionnal-material-LM-FDR.Rmd
 - 095-pca.Rmd
 
 # Information for Learners
