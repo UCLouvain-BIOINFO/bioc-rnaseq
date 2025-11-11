@@ -68,7 +68,7 @@ control samples, and a value of 1 when considering treated samples.
 
 The $\beta_1 . x$ term is hence equal to 0, so the equation can be written:
 
-$y = \beta_0$
+$$y = \beta_0$$
 
 This means that the $\beta_0$ term represents the expression level of the gene 
 in the control samples, this coefficient is usually called the **intercept**
@@ -77,13 +77,13 @@ in the control samples, this coefficient is usually called the **intercept**
 
 The equation becomes:
 
-$y = \beta_0 + \beta_1$
+$$y = \beta_0 + \beta_1$$
 
 Assuming our expression values are in a log scale then
 
-$\beta_1 = y - \beta_0 = log(expression_{Treated\_cells}) - log(expression_{Control\_cells})$
+$$\beta_1 = y - \beta_0 = log(expression_{Treated\_cells}) - log(expression_{Control\_cells})$$
 
-$\beta_1 = log(\frac{expression_{Treated\_cells}}{expression_{Control\_cells}})$
+$$\beta_1 = log(\frac{expression_{Treated\_cells}}{expression_{Control\_cells}})$$
 
 The $\beta_1$ term represents hence the **logFoldchange** between the treated 
 and the control samples (the treatment effect).
@@ -247,7 +247,7 @@ in the different samples:
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge1: 
+### Challenge: 
 
 Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
@@ -293,7 +293,7 @@ rna2 %>%
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge2: 
+### Challenge: 
 
 Re-use the `lm()` function to fit a linear model that would only account for infection.
 
@@ -390,7 +390,7 @@ in the different samples:
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge1: 
+### Challenge: 
 
 Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
@@ -512,7 +512,7 @@ fig1 / fig2
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge2: Discuss 
+## Challenge: Discuss 
 
 - If you were to visualize the p-value distribution using a histogram, how would you expect it to look like?
 
@@ -565,7 +565,7 @@ table(res_modified$pval < 0.05)
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge2: Discuss 
+## Challenge: Discuss 
 
 - How do think the histogram of the p-values of the first 1000 would look like?
 
