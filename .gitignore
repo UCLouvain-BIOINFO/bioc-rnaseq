@@ -2,6 +2,7 @@
 episodes/*html
 site/*
 !site/README.md
+bioc-rnaseq.Rproj
 
 # History files
 .Rhistory
