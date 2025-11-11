@@ -22,6 +22,11 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+*Parts of this chapter are based on the course [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
+
+
+
+
 
 # Multifactorial design and linear models
 
@@ -62,7 +67,7 @@ control samples, and a value of 1 when considering treated samples.
 
 The $\beta_1 . x$ term is hence equal to 0, so the equation can be written:
 
-$y = \beta_0$
+$$y = \beta_0$$
 
 This means that the $\beta_0$ term represents the expression level of the gene 
 in the control samples, this coefficient is usually called the **intercept**
@@ -71,13 +76,13 @@ in the control samples, this coefficient is usually called the **intercept**
 
 The equation becomes:
 
-$y = \beta_0 + \beta_1$
+$$y = \beta_0 + \beta_1$$
 
 Assuming our expression values are in a log scale then
 
-$\beta_1 = y - \beta_0 = log(expression_{Treated\_cells}) - log(expression_{Control\_cells})$
+$$\beta_1 = y - \beta_0 = log(expression_{Treated\_cells}) - log(expression_{Control\_cells})$$
 
-$\beta_1 = log(\frac{expression_{Treated\_cells}}{expression_{Control\_cells}})$
+$$\beta_1 = log(\frac{expression_{Treated\_cells}}{expression_{Control\_cells}})$$
 
 The $\beta_1$ term represents hence the **logFoldchange** between the treated 
 and the control samples (the treatment effect).
@@ -179,7 +184,7 @@ rna1 %>%
   geom_point(aes(x = "InfluenzaA", y = 6.094074 + 0.8357904), color = "red", size = 4)
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 And indeed, we see that
 
@@ -269,7 +274,7 @@ of input variables.
 [[1]]
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 From this figure, we can see how the genes log expression values are modelised
 in the different samples:
@@ -285,7 +290,7 @@ in the different samples:
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge1: 
+### Challenge: 
 
 Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
@@ -350,7 +355,7 @@ rna2 %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
 :::::::::::::::::::::::::::::::::
@@ -358,7 +363,7 @@ rna2 %>%
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge2: 
+### Challenge: 
 
 Re-use the `lm()` function to fit a linear model that would only account for infection.
 
@@ -405,7 +410,7 @@ rna2 %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -458,7 +463,7 @@ of input variables.
 [[1]]
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 From this figure, we can see how the genes log expression values are modelised
 in the different samples:
@@ -474,7 +479,7 @@ in the different samples:
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-### Challenge1: 
+### Challenge: 
 
 Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
@@ -560,13 +565,13 @@ head(exp)
 ```
 
 ``` output
-             A1        A2        A3       B1        B2        B3
-Gene1  76.40680  80.14777  80.89500 83.08430  61.52934 132.58000
-Gene2  95.05106 103.21809 108.28011 98.85551 118.65169  54.78860
-Gene3  95.82976 109.70075  99.40699 89.99937 124.73202 114.73639
-Gene4  76.17949 106.12586 121.83424 79.34932  91.80822 113.07296
-Gene5 118.46590 102.40266 101.35891 96.24010  88.27471 102.95286
-Gene6  71.92304  91.23588 104.79177 98.89892 103.32194  85.51648
+             A1        A2        A3        B1        B2        B3
+Gene1 126.20619 114.81352 106.30364 105.58708  86.28296 134.25319
+Gene2  92.79943 148.59937 100.50412  76.39847 149.31715  74.76356
+Gene3  86.27599 100.45275 106.27185  88.32837 114.65219  58.13196
+Gene4  87.32554  92.37353  73.04025 104.34540  70.80240  97.51847
+Gene5  98.52765  91.90655 113.16221  93.40121  51.74447  86.68396
+Gene6  66.02451  65.56679 113.39284 121.66240  75.88539  88.16341
 ```
 
 The data is normally distributed so let's apply a t.test on one of these genes 
@@ -582,13 +587,13 @@ t.test(exp[n, 1:3], exp[n, 4:6])
 	Welch Two Sample t-test
 
 data:  exp[n, 1:3] and exp[n, 4:6]
-t = -0.62851, df = 2.0174, p-value = 0.5934
+t = 0.46858, df = 2.6652, p-value = 0.675
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -103.19405   76.69801
+ -44.52577  58.65919
 sample estimates:
 mean of x mean of y 
- 79.14986  92.39788 
+ 115.7744  108.7077 
 ```
 
 Now, let's apply the t.test on all genes
@@ -605,18 +610,18 @@ res
 
 ``` output
 # A tibble: 20,000 × 8
-   Gene      A1    A2    A3    B1    B2    B3  pval
-   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
- 1 Gene1   76.4  80.1  80.9  83.1  61.5 133.  0.593
- 2 Gene2   95.1 103.  108.   98.9 119.   54.8 0.609
- 3 Gene3   95.8 110.   99.4  90.0 125.  115.  0.522
- 4 Gene4   76.2 106.  122.   79.3  91.8 113.  0.712
- 5 Gene5  118.  102.  101.   96.2  88.3 103.  0.177
- 6 Gene6   71.9  91.2 105.   98.9 103.   85.5 0.587
- 7 Gene7  100.   68.6  86.9  81.3 148.   88.7 0.438
- 8 Gene8   86.6 106.   95.8 111.   89.5 108.  0.486
- 9 Gene9   77.3  90.3  84.0  69.6 107.   97.1 0.589
-10 Gene10 142.   96.6 168.  146.  126.   94.4 0.632
+   Gene      A1    A2    A3    B1    B2    B3   pval
+   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
+ 1 Gene1  126.  115.  106.  106.   86.3 134.  0.675 
+ 2 Gene2   92.8 149.  101.   76.4 149.   74.8 0.673 
+ 3 Gene3   86.3 100.  106.   88.3 115.   58.1 0.591 
+ 4 Gene4   87.3  92.4  73.0 104.   70.8  97.5 0.610 
+ 5 Gene5   98.5  91.9 113.   93.4  51.7  86.7 0.198 
+ 6 Gene6   66.0  65.6 113.  122.   75.9  88.2 0.553 
+ 7 Gene7  102.  101.   97.1 122.   80.7 124.  0.602 
+ 8 Gene8   84.1 115.  102.   73.1 115.   92.7 0.685 
+ 9 Gene9   88.9 112.   72.5 135.  119.  140.  0.0528
+10 Gene10 112.  105.  100.   90.7  85.8 106.  0.194 
 # ℹ 19,990 more rows
 ```
 
@@ -639,7 +644,7 @@ table(res$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-19271   729 
+19291   709 
 ```
 
 ``` r
@@ -668,7 +673,7 @@ fig2 <- res_long %>%
 fig1 / fig2
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::
 
@@ -677,7 +682,7 @@ fig1 / fig2
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge2: Discuss 
+## Challenge: Discuss 
 
 - If you were to visualize the p-value distribution using a histogram, how would you expect it to look like?
 
@@ -690,7 +695,7 @@ res %>%
   geom_histogram(binwidth = 0.05, boundary = 0, color = "gray")
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 
 :::::::::::::::::::::::::::::::::
@@ -722,7 +727,7 @@ exp_modified_tbl %>%
   geom_density(alpha = .3)
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 Let's run a t-test on this new dataset:
 
@@ -738,12 +743,12 @@ table(res_modified$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-18002  1998 
+18027  1973 
 ```
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge2: Discuss 
+## Challenge: Discuss 
 
 - How do think the histogram of the p-values of the first 1000 would look like?
 
@@ -785,7 +790,7 @@ h3 <- res_modified %>%
 h1 + h2 + h3
 ```
 
-<img src="fig/093-linear-models-FDR-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
 The figure on the right illustrates the principle behind the FDR adjustment. 
 The False discovery rate (FDR) is the expected proportion of false positives 
@@ -816,11 +821,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18002   970
-    TRUE      0  1028
+    FALSE 18027   944
+    TRUE      0  1029
 ```
 
-Only 1028 were found to be significant after FDR correction.
+Only 1029 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
@@ -842,7 +847,7 @@ table(res$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-19271   729 
+19291   709 
 ```
 
 ``` r

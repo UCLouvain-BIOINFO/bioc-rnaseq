@@ -1,7 +1,7 @@
 ---
 title: "Additional material: PCA"
 source: Rmd
-teaching: 20
+teaching: 40
 exercises: 0
 ---
 
@@ -19,6 +19,8 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+*Parts of this chapter are based on the course [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/).*
+
 
 
 
@@ -33,7 +35,7 @@ related to PCA. This dataset represents the measurement of genes *x* and *y* in
 20 samples. We will be using the scaled and centered version of this dataset.
 
 <div class="figure" style="text-align: center">
-<img src="fig/095-pca-rendered-xyplot-1.png" alt="Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples"  />
+<img src="fig/11-Additional-material-PCA-rendered-xyplot-1.png" alt="Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples"  />
 <p class="caption">Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples</p>
 </div>
 
@@ -47,7 +49,7 @@ line. Below, we project our data on the x and y axes. These are
 called **linear projections**.
 
 <div class="figure" style="text-align: center">
-<img src="fig/095-pca-rendered-linproj-1.png" alt="Projection of the data on the x (left) and y (right) axes."  />
+<img src="fig/11-Additional-material-PCA-rendered-linproj-1.png" alt="Projection of the data on the x (left) and y (right) axes."  />
 <p class="caption">Projection of the data on the x (left) and y (right) axes.</p>
 </div>
 
@@ -68,7 +70,7 @@ predictor or the response.
 
 
 <div class="figure" style="text-align: center">
-<img src="fig/095-pca-rendered-linreg-1.png" alt="Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange)."  />
+<img src="fig/11-Additional-material-PCA-rendered-linreg-1.png" alt="Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange)."  />
 <p class="caption">Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange).</p>
 </div>
 
@@ -80,12 +82,12 @@ It is also the one that maximises the variance of the projections along itself.
 The **second principal component (PC2)** is then chosen to be orthogonal to the
 first one. In this case, there is only one possibility.
 
-<img src="fig/095-pca-rendered-pxaex-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-pxaex-1.png" style="display: block; margin: auto;" />
 
 After rotating the plot such that PC1 becomes the horizontal axis, we obtain the PCA plot:
 
 
-<img src="fig/095-pca-rendered-pxaex2-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-pxaex2-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -99,7 +101,7 @@ it is better to represent a PCA plot as a rectangle, using an aspect
 ratio that is illustrative of the respective variances.
 
 <div class="figure" style="text-align: center">
-<img src="fig/095-pca-rendered-pxaex3-1.png" alt="Final principal component analysis of the data."  />
+<img src="fig/11-Additional-material-PCA-rendered-pxaex3-1.png" alt="Final principal component analysis of the data."  />
 <p class="caption">Final principal component analysis of the data.</p>
 </div>
 
@@ -111,6 +113,20 @@ expression values of 5 genes in two groups of cells (control and treated cells).
 Since we have the expression values of 5 genes (5 dimensions), we cannot represent
 them on a single plot.
 
+
+
+
+``` r
+tiny_dataset <- structure(list(
+  GeneA = c(30, 30, 31, 30, 30, 31, 30, 29, 30, 30), 
+  GeneB = c(6, 5, 5, 5, 4, 1179, 1050, 803, 1070, 953), 
+  GeneC = c(75, 79, 75, 76, 77, 983, 1008, 1002, 989, 1013), 
+  GeneD = c(504, 497, 509, 509, 508, 507, 506, 499, 497, 496), 
+  GeneE = c(797, 799, 794, 811, 806, 49, 50, 50, 51, 50)), 
+  class = "data.frame", 
+  row.names = c("CTL_1", "CTL_2", "CTL_3", "CTL_4", "CTL_5", "Treated_1", 
+                "Treated_2", "Treated_3", "Treated_4", "Treated_5"))
+```
 
 
 
@@ -258,7 +274,7 @@ as_tibble(pca$x, rownames = "sample") %>%
   ylab(paste0("PC2: ", round(pve[2] * 100), " % of variance")) 
 ```
 
-<img src="fig/095-pca-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 This PCA is a representation in 2 dimensions (PC1 and PC2) of our 5-dimensions 
 dataset. 
@@ -306,7 +322,7 @@ Loadings can be visualised on a **biplot**, where the arrows show the contributi
 of each gene to the principal components.
 
 
-<img src="fig/095-pca-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 This biplot shows that:
 
@@ -363,17 +379,17 @@ Here are a few examples of PCAs corresponding to different experimental designs.
 How would you interprete them and what impact would they have on the analysis?
 
 
-<img src="fig/095-pca-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 
-<img src="fig/095-pca-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 
-<img src="fig/095-pca-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 
 
-<img src="fig/095-pca-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
