@@ -71,6 +71,7 @@ episodes:
 - 09-Additional-material-HTS.Rmd
 - 10-additionnal-material-LM-FDR.Rmd
 - 11-Additional-material-PCA.Rmd
+- 12-GSEA.Rmd
 
 # Information for Learners
 learners:
