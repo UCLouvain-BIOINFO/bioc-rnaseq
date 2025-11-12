@@ -22,7 +22,8 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-*Parts of this chapter are based on the course [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
+*Parts of this chapter are based on the courses [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/)* 
+*and [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
 
 
 
