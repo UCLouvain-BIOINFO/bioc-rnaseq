@@ -22,7 +22,8 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-*Parts of this chapter are based on the course [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
+*Parts of this chapter are based on the courses [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/)* 
+*and [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
 
 
 
@@ -533,75 +534,77 @@ significantly different between males and females
 
 
 
-# multiple testing issue
+# Multiple testing issue
 
 In the few examples of linear model that we have seen in the previous section, 
-the `lm()` function was always applied to a single gene. 
+the `lm()` function was always applied to a single gene. In a real RNA-seq experiment, 
+we will have a few thousand tests to perform, as each gene is going to be tested.
 
-In a real RNA-seq experiment, we will have a few thousand tests to perform, as
-each gene is going to be tested
-
-To introduce the multiple testing issue, let's refer to [this xkcd
-cartoon](https://xkcd.com/882/) that depicts scientists testing
-whether eating jelly beans causes acne.
+Let's use the following dataset that provides log expression values for 20,000 genes
+in 6 samples, three in groupA and three in groupB.
 
 
-<div class="figure" style="text-align: center">
-<img src="./fig/jellybeans.png" alt="Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/)." width="635" />
-<p class="caption">Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/).</p>
-</div>
-
-
-Let's illustrate the multiple testing problem using simulated expression data.
-We are going to create a simulated expression matrix containing expression values for 20,000 genes, 
-all generated from the same distribution $N(100, 20)$. 
 
 
 ``` r
-exp <- matrix(rnorm(120000, mean = 100, sd = 20), ncol = 6)
-rownames(exp) <- paste0("Gene", 1:20000)
-colnames(exp) <- c(paste0("A", 1:3), paste0("B", 1:3))
-head(exp)
+if (!file.exists("data/exp.rda")) {
+    dir.create("data", showWarnings = FALSE)
+    download.file(
+        url = "https://github.com/UCLouvain-BIOINFO/bioc-rnaseq/tree/main/episodes/data/exp.rda?raw=true", 
+        destfile = "data/exp.rda"
+    )
+}
+load("data/exp.rda")
+exp
 ```
 
 ``` output
-             A1        A2        A3        B1        B2        B3
-Gene1 126.20619 114.81352 106.30364 105.58708  86.28296 134.25319
-Gene2  92.79943 148.59937 100.50412  76.39847 149.31715  74.76356
-Gene3  86.27599 100.45275 106.27185  88.32837 114.65219  58.13196
-Gene4  87.32554  92.37353  73.04025 104.34540  70.80240  97.51847
-Gene5  98.52765  91.90655 113.16221  93.40121  51.74447  86.68396
-Gene6  66.02451  65.56679 113.39284 121.66240  75.88539  88.16341
+# A tibble: 20,000 × 7
+   Gene      A1    A2    A3    B1    B2    B3
+   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1 Gene1   4.72  4.89  4.51  4.00  4.66  4.67
+ 2 Gene2   4.61  4.96  4.58  4.53  4.21  4.78
+ 3 Gene3   4.75  4.70  4.75  4.55  4.89  4.31
+ 4 Gene4   4.83  4.83  4.43  4.53  4.38  4.55
+ 5 Gene5   4.68  4.33  4.84  4.58  4.64  4.92
+ 6 Gene6   4.57  4.74  4.68  4.84  4.42  4.96
+ 7 Gene7   4.68  4.47  4.50  4.55  4.23  4.67
+ 8 Gene8   4.59  4.81  4.44  4.45  4.20  4.61
+ 9 Gene9   4.53  4.84  4.51  4.53  4.61  4.59
+10 Gene10  4.74  4.09  4.61  4.33  4.72  4.61
+# ℹ 19,990 more rows
 ```
 
-The data is normally distributed so let's apply a t.test on one of these genes 
+
+
+
+Let's apply a t.test on one of these genes 
 
 
 ``` r
-n <- 1
-t.test(exp[n, 1:3], exp[n, 4:6])
+n <- 57
+t.test(exp[n, c("A1", "A2", "A3")], exp[n, c("B1", "B2", "B3")])
 ```
 
 ``` output
 
 	Welch Two Sample t-test
 
-data:  exp[n, 1:3] and exp[n, 4:6]
-t = 0.46858, df = 2.6652, p-value = 0.675
+data:  exp[n, c("A1", "A2", "A3")] and exp[n, c("B1", "B2", "B3")]
+t = 0.51756, df = 2.3508, p-value = 0.6494
 alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -44.52577  58.65919
+ -0.849086  1.121633
 sample estimates:
 mean of x mean of y 
- 115.7744  108.7077 
+ 4.575339  4.439066 
 ```
 
 Now, let's apply the t.test on all genes
 
 
 ``` r
-exp_tbl <- as_tibble(exp, rownames = "Gene") 
-res <- exp_tbl %>% 
+res <- exp %>% 
   rowwise() %>% 
   mutate(pval = t.test(c(A1, A2, A3), c(B1,B2,B3))$p.value) %>% 
   ungroup() # to revert the rowwise()
@@ -610,18 +613,18 @@ res
 
 ``` output
 # A tibble: 20,000 × 8
-   Gene      A1    A2    A3    B1    B2    B3   pval
-   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
- 1 Gene1  126.  115.  106.  106.   86.3 134.  0.675 
- 2 Gene2   92.8 149.  101.   76.4 149.   74.8 0.673 
- 3 Gene3   86.3 100.  106.   88.3 115.   58.1 0.591 
- 4 Gene4   87.3  92.4  73.0 104.   70.8  97.5 0.610 
- 5 Gene5   98.5  91.9 113.   93.4  51.7  86.7 0.198 
- 6 Gene6   66.0  65.6 113.  122.   75.9  88.2 0.553 
- 7 Gene7  102.  101.   97.1 122.   80.7 124.  0.602 
- 8 Gene8   84.1 115.  102.   73.1 115.   92.7 0.685 
- 9 Gene9   88.9 112.   72.5 135.  119.  140.  0.0528
-10 Gene10 112.  105.  100.   90.7  85.8 106.  0.194 
+   Gene      A1    A2    A3    B1    B2    B3  pval
+   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+ 1 Gene1   4.72  4.89  4.51  4.00  4.66  4.67 0.367
+ 2 Gene2   4.61  4.96  4.58  4.53  4.21  4.78 0.362
+ 3 Gene3   4.75  4.70  4.75  4.55  4.89  4.31 0.474
+ 4 Gene4   4.83  4.83  4.43  4.53  4.38  4.55 0.249
+ 5 Gene5   4.68  4.33  4.84  4.58  4.64  4.92 0.632
+ 6 Gene6   4.57  4.74  4.68  4.84  4.42  4.96 0.679
+ 7 Gene7   4.68  4.47  4.50  4.55  4.23  4.67 0.682
+ 8 Gene8   4.59  4.81  4.44  4.45  4.20  4.61 0.286
+ 9 Gene9   4.53  4.84  4.51  4.53  4.61  4.59 0.689
+10 Gene10  4.74  4.09  4.61  4.33  4.72  4.61 0.773
 # ℹ 19,990 more rows
 ```
 
@@ -630,9 +633,33 @@ res
 
 ## Challenge:  
 
-- How many significant genes did we obtained ? Was it expected?
+- How many significant genes did we obtained ? Which genes are of possible
+biological interest?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+The data above have been generated with the rnorm function for all samples.
+
+This is the code that generated the data:
+
+
+``` r
+set.seed(2025)
+exp <- matrix(rnorm(20000*6, mean = 100, sd = 20), ncol = 6)
+rownames(exp) <- paste0("Gene", 1:20000)
+colnames(exp) <- c(paste0("A", 1:3), paste0("B", 1:3))
+exp <- log(exp)
+exp <- as_tibble(exp, rownames = "Gene") 
+```
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## Challenge:  
+
+- Do you still think any of the features show significant differences?
 
 - Why do we obtain genes with a p-value < 0.05?
+
 
 :::::::::::::::::::::::: solution
 
@@ -644,7 +671,7 @@ table(res$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-19291   709 
+19324   676 
 ```
 
 ``` r
@@ -673,7 +700,7 @@ fig2 <- res_long %>%
 fig1 / fig2
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::
 
@@ -695,12 +722,26 @@ res %>%
   geom_histogram(binwidth = 0.05, boundary = 0, color = "gray")
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 
 :::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+[This xkcd cartoon](https://xkcd.com/882/) humorously illustrates the multiple 
+testing issue by depicting scientists testing whether eating jelly beans causes acne.
+
+
+
+<div class="figure" style="text-align: center">
+<img src="./fig/jellybeans.png" alt="Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/)." width="635" />
+<p class="caption">Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/).</p>
+</div>
+
+
 
 Now, let's slightly modify our simulated expression data.
 
@@ -716,24 +757,25 @@ by increasing their expression values in group B.
 ``` r
 exp_modified <- exp
 
-exp_modified[1:1000, 4:6] <- matrix(rnorm(1000*3, mean = 300, sd = 20), ncol = 3)
-exp_modified_tbl <- as_tibble(exp_modified, rownames = "Gene") 
-exp_modified_tbl$DE <- c(rep(TRUE, 1000), rep(FALSE, 19000))
+exp_modified[1:1000, c("B1", "B2", "B3")] <- log(matrix(rnorm(1000*3, mean = 300, sd = 20), ncol = 3))
 
-exp_modified_tbl %>% 
+exp_modified <- exp_modified %>% 
+  mutate(DE = c(rep(TRUE, 1000), rep(FALSE, 19000)))
+
+exp_modified %>% 
   pivot_longer(names_to = "sample", values_to = "expression", -c(Gene, DE)) %>% 
   mutate(group = substr(sample, 1, 1)) %>% 
   ggplot(aes(x = expression, fill = group, color = group)) + 
   geom_density(alpha = .3)
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
 Let's run a t-test on this new dataset:
 
 
 ``` r
-res_modified <- exp_modified_tbl %>% 
+res_modified <- exp_modified %>% 
   rowwise() %>% 
   mutate(pval = t.test(c(A1, A2, A3), c(B1, B2, B3), var = TRUE)$p.value) %>% 
   ungroup()
@@ -743,7 +785,7 @@ table(res_modified$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-18027  1973 
+18115  1885 
 ```
 
 :::::::::::::::::::::::::::::::::::::::  challenge
@@ -790,7 +832,7 @@ h3 <- res_modified %>%
 h1 + h2 + h3
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 The figure on the right illustrates the principle behind the FDR adjustment. 
 The False discovery rate (FDR) is the expected proportion of false positives 
@@ -821,11 +863,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18027   944
-    TRUE      0  1029
+    FALSE 18115  1056
+    TRUE      0   829
 ```
 
-Only 1029 were found to be significant after FDR correction.
+Only 829 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
@@ -847,7 +889,7 @@ table(res$pval < 0.05)
 ``` output
 
 FALSE  TRUE 
-19291   709 
+19324   676 
 ```
 
 ``` r
