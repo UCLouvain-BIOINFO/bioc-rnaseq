@@ -191,7 +191,7 @@ a natural way is to first visualize them with a Venn diagram.
 
 ``` r
 library(gplots)
-plot(venn(list("sexDEgenes"  = sexDEgenes, 
+plot(venn(list("sexDEgenes"  = sexDEgenes,
                "XY gene set" = XYGeneSet)))
 title(paste0("|universe| = ", length(totalGenes)))
 ```
@@ -321,7 +321,7 @@ t$p.value
 
 Odds ratio from the Fisher's exact test is defined as follows:
 
-$$ 
+$$
 \mathrm{Odds\_ratio} = \frac{n_{11}/n_{21}}{n_{12}/n_{22}} = \frac{n_{11}/n_{12}}{n_{21}/n_{22}} = \frac{n_{11} * n_{22}}{n_{12} * n_{21}}
 $$
 
@@ -501,8 +501,8 @@ microbenchmark(
 ``` output
 Unit: microseconds
    expr     min       lq      mean   median       uq     max neval
- fisher 217.184 227.2910 238.68375 234.5035 243.4690 464.843   100
-  hyper   1.538   1.6075   2.04903   1.9630   2.2425   6.552   100
+ fisher 250.987 257.6000 272.59702 264.2275 278.5735 586.372   100
+  hyper   1.593   1.7635   2.67391   2.1840   3.3865   9.027   100
 ```
 
 It is very astonishing that `phyper()` is hundreds of times faster than
@@ -564,7 +564,7 @@ the knowledge of the gene set and is for the inference of the analysis. "GO
 gene sets" and "pathways" specifically refer to the enrichment analysis using
 GO gene sets and pahtway gene sets.
 
-<img src="fig/geneset.svg" />
+<img src="fig/geneset.svg" alt="Illustration or a gene set for a term."/>
 
 Before we touch the gene set databases, we first summarize the general formats
 of gene sets in R. In most analysis, a gene set is simply treated as a vector
@@ -717,7 +717,7 @@ Next, let's go through gene sets from several major databases: the GO, KEGG
 and MSigDB databases.
 
 
-### Gene Ontology gene sets 
+### Gene Ontology gene sets
 
 Gene Ontology (GO) is the standard source for gene set enrichment analysis. GO
 contains three namespaces of biological process (BP), cellular components (CC)
@@ -785,7 +785,7 @@ ONTOLOGY is BP_", which is translated into the following code:
 
 
 ``` r
-BP_Id = mapIds(org.Hs.eg.db, keys = "BP", keytype = "ONTOLOGY", 
+BP_Id = mapIds(org.Hs.eg.db, keys = "BP", keytype = "ONTOLOGY",
                column = "GO", multiVals = "list")[[1]]
 head(BP_Id)
 ```
@@ -805,7 +805,7 @@ a vector of GO IDs, select ENTREZIDs which correspond to every one of them_".
 
 
 ``` r
-BPGeneSets = mapIds(org.Hs.eg.db, keys = BP_Id, keytype = "GOALL", 
+BPGeneSets = mapIds(org.Hs.eg.db, keys = BP_Id, keytype = "GOALL",
                     column = "ENTREZID", multiVals = "list")
 ```
 
@@ -988,11 +988,11 @@ of MSigDB (v2023.1.Hs), it has grown into nine gene sets collections, covering
 MSigDB categorizes gene sets into nine collections where each collection
 focuses on a specific topic. For some collections, they are additionally split
 into sub-collections. There are several ways to obtain gene sets from MSigDB.
-One convenient way is to use the **msigdb** package. Another option is to use 
-the **msigdbr** CRAN package, which supports organisms other than human and 
+One convenient way is to use the **msigdb** package. Another option is to use
+the **msigdbr** CRAN package, which supports organisms other than human and
 mouse by mapping to orthologs.
 
-**msigdb** provides mouse and human gene sets, defined using either gene 
+**msigdb** provides mouse and human gene sets, defined using either gene
 symbols or Entrez IDs. Let's get the mouse collection.
 
 
@@ -1005,10 +1005,10 @@ library(GSEABase)
 MSigDBGeneSets <- getMsigdb(org = "mm", id = "SYM", version = "7.4")
 ```
 
-The `msigdb` object above is a `GeneSetCollection`, storing all gene sets 
-from MSigDB. The `GeneSetCollection` object class is defined in the `GSEABase` 
-package, and it is a linear data structure similar to a base list object, but 
-with additional metadata such as the type of gene identifier or provenance 
+The `msigdb` object above is a `GeneSetCollection`, storing all gene sets
+from MSigDB. The `GeneSetCollection` object class is defined in the `GSEABase`
+package, and it is a linear data structure similar to a base list object, but
+with additional metadata such as the type of gene identifier or provenance
 information about the gene sets.
 
 
@@ -1033,7 +1033,7 @@ length(MSigDBGeneSets)
 [1] 44688
 ```
 
-Each signature is stored in a `GeneSet` object, also defined in the `GSEABase` 
+Each signature is stored in a `GeneSet` object, also defined in the `GSEABase`
 package.
 
 
@@ -1074,7 +1074,7 @@ geneIds(gs)
 [25] "Slc22a27" "Slc22a29" "Slc22a28" "Slc22a22"
 ```
 
-We can also subset the collection. First, let's list the available collections 
+We can also subset the collection. First, let's list the available collections
 and subcollections.
 
 
@@ -1114,8 +1114,8 @@ GeneSetCollection
     collectionType: BroadCollection (1 total)
 ```
 
-If you only want to use a sub-category, specify both the `collection` and 
-`subcollection` arguments to `subsetCollection`. 
+If you only want to use a sub-category, specify both the `collection` and
+`subcollection` arguments to `subsetCollection`.
 
 ## ORA with clusterProfiler
 
@@ -1143,7 +1143,7 @@ fold change can be thought as a filtering from the biology aspect.
 
 ``` r
 resTime <- DESeq2::results(dds, contrast = c("time", "Day8", "Day0"))
-timeDE <- as.data.frame(subset(resTime, 
+timeDE <- as.data.frame(subset(resTime,
                                padj < 0.05 & abs(log2FoldChange) > log2(1.5)
                        ))
 timeDEgenes <- rownames(timeDE)
@@ -1181,8 +1181,8 @@ GO gene sets are automatically retrieved and processed from `org.Mm.eg.db` in
 ``` r
 library(clusterProfiler)
 library(org.Mm.eg.db)
-resTimeGO = enrichGO(gene = timeDEgenes, 
-                     ont = "BP", 
+resTimeGO = enrichGO(gene = timeDEgenes,
+                     ont = "BP",
                      OrgDb = org.Mm.eg.db)
 ```
 
@@ -1191,7 +1191,7 @@ resTimeGO = enrichGO(gene = timeDEgenes,
 ```
 
 ``` output
---> Expected input gene ID: 635253,104884,77782,208084,52535,56420
+--> Expected input gene ID: 236904,170472,12144,21939,110816,12914
 ```
 
 ``` output
@@ -1214,9 +1214,9 @@ for `keyType` are in `keytypes(org.Mm.eg.db)`.
 
 
 ``` r
-resTimeGO = enrichGO(gene = timeDEgenes, 
+resTimeGO = enrichGO(gene = timeDEgenes,
                      keyType = "SYMBOL",
-                     ont = "BP", 
+                     ont = "BP",
                      OrgDb = org.Mm.eg.db)
 resTimeGOTable = as.data.frame(resTimeGO)
 head(resTimeGOTable)
@@ -1269,7 +1269,7 @@ In the output data frame, there are the following columns:
 - `geneID`: A list of DE genes in the gene set.
 - `Count`: Number of DE genes in the gene set.
 
-You may have found the total number of DE genes changes. There are 
+You may have found the total number of DE genes changes. There are
 1134 in `timeDEgenes`, but only 983 DE genes are included in
 the enrichment result table (in the `GeneRatio` column). The main reason is by default DE genes not
 annotated to any GO gene set are filtered out. This relates to the "universe"
@@ -1306,9 +1306,9 @@ is suggested to set both `pvalueCutoff` and `qvalueCutoff` to 1 in
 
 
 ``` r
-resTimeGO = enrichGO(gene = timeDEgenes, 
+resTimeGO = enrichGO(gene = timeDEgenes,
                      keyType = "SYMBOL",
-                     ont = "BP", 
+                     ont = "BP",
                      OrgDb = org.Mm.eg.db,
                      pvalueCutoff = 1,
                      qvalueCutoff = 1)
@@ -1383,7 +1383,7 @@ use `select()` function: `select(org.Mm.eg.db, keys = timeDEgenes, keytype =
 
 
 ``` r
-EntrezIDs = mapIds(org.Mm.eg.db, keys = timeDEgenes, 
+EntrezIDs = mapIds(org.Mm.eg.db, keys = timeDEgenes,
                    keytype = "SYMBOL", column = "ENTREZID", multiVals = "first")
 ```
 
@@ -1408,7 +1408,7 @@ data frame.
 
 
 ``` r
-resTimeKEGG = enrichKEGG(gene = EntrezIDs, 
+resTimeKEGG = enrichKEGG(gene = EntrezIDs,
                          organism = "mmu",
                          pvalueCutoff = 1,
                          qvalueCutoff = 1)
@@ -1487,7 +1487,7 @@ For MSigDB gene sets, there is no pre-defined enrichment function. We need to
 directly use the low-level enrichment function `enricher()` which accepts
 self-defined gene sets. The gene sets should be in a format of a two-column
 data frame of genes and gene sets (or a class that can be converted to a data
-frame). Let's use the hallmark collection (`hm`) that we generated above. 
+frame). Let's use the hallmark collection (`hm`) that we generated above.
 
 
 ``` r
@@ -1513,7 +1513,7 @@ be the same as in the DE genes, so here we choose the `"gene_symbol"` column.
 
 
 ``` r
-resTimeHallmark = enricher(gene = timeDEgenes, 
+resTimeHallmark = enricher(gene = timeDEgenes,
                            TERM2GENE = gene_sets,
                            pvalueCutoff = 1,
                            qvalueCutoff = 1)
@@ -1706,18 +1706,18 @@ df1 = ora(timeDEgenes, HallmarkGeneSets)
 # all protein-coding genes, ~ 20k genes
 df2 = ora(timeDEgenes, HallmarkGeneSets, rownames(se))
 # all genes in org.Mm.eg.db ~ 70k genes
-df3 = ora(timeDEgenes, HallmarkGeneSets, 
+df3 = ora(timeDEgenes, HallmarkGeneSets,
     keys(org.Mm.eg.db, keytype = "SYMBOL"))
 
-# df1, df2, and df3 are in the same row order, 
+# df1, df2, and df3 are in the same row order,
 # so we can directly compare them
-plot(df1$p_value, df2$p_value, col = 2, pch = 16, 
-    xlim = c(0, 1), ylim = c(0, 1), 
+plot(df1$p_value, df2$p_value, col = 2, pch = 16,
+    xlim = c(0, 1), ylim = c(0, 1),
     xlab = "all hallmark genes as universe (p-values)", ylab = "p-values",
     main = "compare universes")
 points(df1$p_value, df3$p_value, col = 4, pch = 16)
 abline(a = 0, b = 1, lty = 2)
-legend("topleft", legend = c("all protein-coding genes as universe", "all genes as universe"), 
+legend("topleft", legend = c("all protein-coding genes as universe", "all genes as universe"),
     pch = 16, col = c(2, 4))
 ```
 
@@ -1750,9 +1750,9 @@ We first re-generate the enrichment table.
 
 ``` r
 library(enrichplot)
-resTimeGO = enrichGO(gene = timeDEgenes, 
+resTimeGO = enrichGO(gene = timeDEgenes,
                      keyType = "SYMBOL",
-                     ont = "BP", 
+                     ont = "BP",
                      OrgDb = org.Mm.eg.db,
                      pvalueCutoff = 1,
                      qvalueCutoff = 1)
@@ -1909,11 +1909,11 @@ take the first 10 gene sets which are the 10 most significant gene sets.
 
 ``` r
 library(ggplot2)
-ggplot(resTimeGOTable[1:10, ], 
-        aes(x = log2_Enrichment, y = factor(Description, levels = rev(Description)), 
+ggplot(resTimeGOTable[1:10, ],
+        aes(x = log2_Enrichment, y = factor(Description, levels = rev(Description)),
             fill = DE_Ratio)) +
     geom_bar(stat = "identity") +
-    geom_text(aes(x = log2_Enrichment, 
+    geom_text(aes(x = log2_Enrichment,
         label = sprintf("%.2e", p.adjust)), hjust = 1, col = "white") +
     ylab("")
 ```
@@ -1925,8 +1925,8 @@ offset to origin, `DE_Ratio` and `Count` to map to dot colors and sizes.
 
 
 ``` r
-ggplot(resTimeGOTable[1:10, ], 
-        aes(x = zScore, y = factor(Description, levels = rev(Description)), 
+ggplot(resTimeGOTable[1:10, ],
+        aes(x = zScore, y = factor(Description, levels = rev(Description)),
             col = DE_Ratio, size = Count)) +
     geom_point() +
     ylab("")
@@ -1950,8 +1950,8 @@ statistically significant and also biologically sensible.
 
 
 ``` r
-ggplot(resTimeGOTable, 
-    aes(x = log2_Enrichment, y = -log10(p.adjust), 
+ggplot(resTimeGOTable,
+    aes(x = log2_Enrichment, y = -log10(p.adjust),
         color = DE_Ratio, size = GS_size)) +
     geom_point() +
     geom_hline(yintercept = -log10(0.01), lty = 2, col = "#444444") +
@@ -1981,9 +1981,9 @@ two enrichment tables for up-regulated genes and down-regulated separately.
 timeDEup <- as.data.frame(subset(resTime, padj < 0.05 & log2FoldChange > log2(1.5)))
 timeDEupGenes <- rownames(timeDEup)
 
-resTimeGOup = enrichGO(gene = timeDEupGenes, 
+resTimeGOup = enrichGO(gene = timeDEupGenes,
                        keyType = "SYMBOL",
-                       ont = "BP", 
+                       ont = "BP",
                        OrgDb = org.Mm.eg.db,
                        universe = rownames(se),
                        pvalueCutoff = 1,
@@ -1999,9 +1999,9 @@ resTimeGOupTable$log2_Enrichment = log( (n_11/n_10)/(n_01/n) )
 timeDEdown <- as.data.frame(subset(resTime, padj < 0.05 & log2FoldChange < -log2(1.5)))
 timeDEdownGenes <- rownames(timeDEdown)
 
-resTimeGOdown = enrichGO(gene = timeDEdownGenes, 
+resTimeGOdown = enrichGO(gene = timeDEdownGenes,
                        keyType = "SYMBOL",
-                       ont = "BP", 
+                       ont = "BP",
                        OrgDb = org.Mm.eg.db,
                        universe = rownames(se),
                        pvalueCutoff = 1,
@@ -2026,11 +2026,11 @@ resTimeGOupTable[3, "Description"] = paste(strwrap(resTimeGOupTable[3, "Descript
 direction = c(rep("up", 5), rep("down", 5))
 ggplot(rbind(resTimeGOupTable[1:5, ],
              resTimeGOdownTable[1:5, ]),
-        aes(x = log2_Enrichment, y = factor(Description, levels = rev(Description)), 
+        aes(x = log2_Enrichment, y = factor(Description, levels = rev(Description)),
             fill = direction)) +
     geom_bar(stat = "identity") +
     scale_fill_manual(values = c("up" = "red", "down" = "darkgreen")) +
-    geom_text(aes(x = log2_Enrichment, 
+    geom_text(aes(x = log2_Enrichment,
         label = sprintf("%.2e", p.adjust)), hjust = 1, col = "white") +
     ylab("")
 ```
@@ -2060,7 +2060,7 @@ simplifyGO(GO_ID)
     so the plot is not generated on the fly.
  -->
 
-<img src="fig/simplifyEnrichment.png" />
+<img src="fig/simplifyEnrichment.png" alt="simpligyGO output figures."/>
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
@@ -2092,11 +2092,11 @@ more information.
 
 <script>
 $(function() {
-    
+
     // if it is a general "callout", we need to filter the callout title
     // value for callout_title can be partial from the complete title
     var callout_title = "reading";  // short for "further reading"
-    
+
     // then we select those callouts with the specified title
     var callout = $(".callout").filter(function(index) {
         var title = $(this).find(".callout-title").text();
@@ -2104,7 +2104,7 @@ $(function() {
     });
     callout.css("border-color", "#2b8cbe"); // select a color, this is for the left border of the box
     callout.find(".callout-square").css("background", "#2b8cbe"); // select a color, this is for the left border of the box
-    
+
     // if you want to replace the default icon, go to https://feathericons.com/, and get the source of the svg icon
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open callout-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>';
     // then update it with the new icon
