@@ -188,7 +188,7 @@ $ fastqc SampleName.fastq
 ### Discussion:
 
 Try to interpret the different plots of this
-[fastQC report](./OD01_10_1_fastqc.html)
+[fastQC report](https://uclouvain-cbio.github.io/WSBIM2122/OD01_10_1_fastqc.html)
 from a real RNA-seq fastq file.
 
 Another report corresponding to [bad
