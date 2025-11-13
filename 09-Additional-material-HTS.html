@@ -473,11 +473,11 @@ a specified order is commonly referred to as a pipeline.</p>
 <figure><img src="fig/pipeline.png" width="30%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="section level3">
 <h3 id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a></h3>
 <p>Of course, no one will analyse the sequences from the fastq file one
-by one to check their quality… Rather, a software called <a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="external-link">FastQC</a>
+by one to check their quality… Rather, a software called <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="external-link">FastQC</a>
 can be used. Then, another program such as <a href="http://www.usadellab.org/cms/?page=trimmomatic" class="external-link">Trimmomatics</a>
 can help to clean the reads.</p>
 <ul><li><strong>FastQC</strong></li>
-</ul><p><a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="external-link">FastQC</a>
+</ul><p><a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="external-link">FastQC</a>
 allows to analyse different features of the reads and generates a report
 that includes several diagnostic plots to highlight any problem the data
 may have.</p>
@@ -537,20 +537,20 @@ window, cutting when the average quality per base drops below 20.</p>
 </div>
 </section><section><h2 class="section-heading" id="alignment">Alignment<a class="anchor" aria-label="anchor" href="#alignment"></a></h2>
 <hr class="half-width"><p>Next step is to map the reads to determine where in the genome the
-reads originated from. Many different aligners are available such as <a href="https://ccb.jhu.edu/software/hisat2/manual.shtml" class="external-link">HISAT2</a>, <a href="https://github.com/alexdobin/STAR" class="external-link">STAR</a>, <a href="http://bio-bwa.sourceforge.net" class="external-link">BWA</a>, <a href="https://combine-lab.github.io/salmon/" class="external-link">Salmon</a>, <a href="https://sourceforge.net/projects/subread/" class="external-link">Subread</a>… There is
+reads originated from. Many different aligners are available such as <a href="https://ccb.jhu.edu/software/hisat2/manual.shtml" class="external-link">HISAT2</a>, <a href="https://github.com/alexdobin/STAR" class="external-link">STAR</a>, <a href="https://bio-bwa.sourceforge.net" class="external-link">BWA</a>, <a href="https://combine-lab.github.io/salmon/" class="external-link">Salmon</a>, <a href="https://sourceforge.net/projects/subread/" class="external-link">Subread</a>… There is
 no gold standard, but some tools are better suited for particular NGS
 analyses <span class="citation">[@Baruzzo:2017]</span>… In the case of
 RNA-seq, it is important to use an aligner able to handle spliced
 reads.</p>
 <figure><img src="fig/spliced_alignment.png" width="70%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Here we show an example of what the command could look like when
-using <a href="http://daehwankimlab.github.io/hisat2/" class="external-link">HISAT2</a>
+using <a href="https://daehwankimlab.github.io/hisat2/" class="external-link">HISAT2</a>
 aligner, launched with default parameters. In this basic configuration,
 mandatory parameters are of course the fastq file(s) and the sequence of
 the genome on which the reads have to be aligned. In practical, the
 genome’s sequence is not given as it is but in an indexed form <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Of course
-many of other parameters can be fine tuned (see the <a href="http://daehwankimlab.github.io/hisat2/manual/" class="external-link">manual</a> for more
-details). The alignment output file data is a <code>sam</code> file (see
-below).</p>
+many of other parameters can be fine tuned (see the <a href="https://daehwankimlab.github.io/hisat2/manual/" class="external-link">manual</a> for
+more details). The alignment output file data is a <code>sam</code> file
+(see below).</p>
 <pre><code>$ hisat2 \
   -p 6 \                        # number of threads
   -x genome_index \             # index for the reference genome
@@ -603,13 +603,13 @@ reference sequence is the same as this alignment’s)</p>
 <p>Field 10: Read sequence (reverse-complemented if aligned to the
 reverse strand)</p>
 <p>Field 11: Base quality (Phred score)</p>
-<p>Field 12: Optional. See <a href="http://daehwankimlab.github.io/hisat2/manual/" class="external-link">hisat2 manual</a>
+<p>Field 12: Optional. See <a href="https://daehwankimlab.github.io/hisat2/manual/" class="external-link">hisat2 manual</a>
 for more information.</p>
 <p><strong>BAM format</strong></p>
 <p>The BAM file is a compressed binary version of SAM file. SAM files
-can be easily converted into BAM files using <a href="http://www.htslib.org%20software" class="external-link">samtools</a>, and it is
-sometimes mandatory to sort the SAM/BAM by chromosomal coordinates for
-downstream applications.</p>
+can be easily converted into BAM files using <a href="https://www.htslib.org" class="external-link">samtools</a> software, and it is sometimes
+mandatory to sort the SAM/BAM by chromosomal coordinates for downstream
+applications.</p>
 <pre><code>samtools view -Sb SampleName.sam | samtools sort &gt; SampleName.bam</code></pre>
 <p><strong>Alignment visualisation</strong></p>
 <p>Alignements described in BAM files can easily be viewed using <a href="https://software.broadinstitute.org/software/igv/" class="external-link">IGV</a>
@@ -631,15 +631,15 @@ spanning splice junctions</p></li>
 </ul></section><section><h2 class="section-heading" id="counting">Counting<a class="anchor" aria-label="anchor" href="#counting"></a></h2>
 <hr class="half-width"><p>Now comes the quantification step. It can be performed with several
 tools such as <a href="https://pypi.org/project/HTSeq/" class="external-link">htseq-count</a>
-or <a href="http://bioinf.wehi.edu.au/featureCounts/" class="external-link">FeatureCounts</a>.
-We will describe the latter as it runs much faster. It was developed for
+or <a href="https://bioinf.wehi.edu.au/featureCounts/" class="external-link">FeatureCounts</a>. We
+will describe the latter as it runs much faster. It was developed for
 counting reads to genomic features such as genes, exons, promoters and
 genomic bins. FeatureCounts takes as input SAM/BAM files and an
 annotation file (such as a gtf file) containing chromosomal coordinates
 of features.</p>
 <p>The Gene Transfer Format (GTF) is a widely used format for storing
 gene annotations. Human and mouse GTF files can be downloaded easily
-from <a href="http://www.ensembl.org/info/data/ftp/index.html" class="external-link">Ensembl</a> or
+from <a href="https://www.ensembl.org/info/data/ftp/index.html" class="external-link">Ensembl</a> or
 from the <a href="https://www.gencodegenes.org/human/" class="external-link">UCSC table
 browser</a>. The first few lines of gtf annotation file for human genome
 assembly GRCh38 look like this:</p>
@@ -651,7 +651,7 @@ count for the corresponding gene. Note that an exon-spanning read will
 be counted only once for the corresponding gene even if it overlaps with
 more than one exon.</p>
 <figure><img src="fig/featurecount_metafeature.png" width="80%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>FeatureCounts could be launched with the following command. As usual,
-many of other parameters can be fine-tuned (see the <a href="http://manpages.ubuntu.com/manpages/bionic/man1/featureCounts.1.html" class="external-link">manual</a>
+many of other parameters can be fine-tuned (see the <a href="https://manpages.ubuntu.com/manpages/bionic/man1/featureCounts.1.html" class="external-link">manual</a>
 for more details).</p>
 <pre><code>featureCounts \
 -p \                        # paired-end

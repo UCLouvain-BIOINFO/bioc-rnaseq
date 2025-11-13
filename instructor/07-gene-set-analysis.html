@@ -525,7 +525,7 @@ diagram.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">gplots</span><span class="op">)</span></span>
-<span><span class="fu">plot</span><span class="op">(</span><span class="fu">venn</span><span class="op">(</span><span class="fu">list</span><span class="op">(</span><span class="st">"sexDEgenes"</span>  <span class="op">=</span> <span class="va">sexDEgenes</span>, </span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="fu">venn</span><span class="op">(</span><span class="fu">list</span><span class="op">(</span><span class="st">"sexDEgenes"</span>  <span class="op">=</span> <span class="va">sexDEgenes</span>,</span>
 <span>               <span class="st">"XY gene set"</span> <span class="op">=</span> <span class="va">XYGeneSet</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">title</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="st">"|universe| = "</span>, <span class="fu">length</span><span class="op">(</span><span class="va">totalGenes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
@@ -874,8 +874,8 @@ distribution of its statistic.</p>
 </h3>
 <pre class="output" tabindex="0"><code>Unit: microseconds
    expr     min       lq      mean   median       uq     max neval
- fisher 217.184 227.2910 238.68375 234.5035 243.4690 464.843   100
-  hyper   1.538   1.6075   2.04903   1.9630   2.2425   6.552   100</code></pre>
+ fisher 250.987 257.6000 272.59702 264.2275 278.5735 586.372   100
+  hyper   1.593   1.7635   2.67391   2.1840   3.3865   9.027   100</code></pre>
 </div>
 <p>It is very astonishing that <code>phyper()</code> is hundreds of
 times faster than <code>fisher.test()</code>. Main reason is in
@@ -934,7 +934,7 @@ description of its biological meaning; It corresponds to the knowledge
 of the gene set and is for the inference of the analysis. “GO gene sets”
 and “pathways” specifically refer to the enrichment analysis using GO
 gene sets and pahtway gene sets.</p>
-<figure><img src="../fig/geneset.svg" class="figure mx-auto d-block"></figure><p>Before we touch the gene set databases, we first summarize the
+<figure><img src="../fig/geneset.svg" alt="Illustration or a gene set for a term." class="figure mx-auto d-block"></figure><p>Before we touch the gene set databases, we first summarize the
 general formats of gene sets in R. In most analysis, a gene set is
 simply treated as a vector of genes. Thus, naturally, a collection of
 gene sets can be represented as a list of vectors. In the following
@@ -1031,7 +1031,7 @@ convert a list to a two-column data frame?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1190,7 +1190,7 @@ following code:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BP_Id</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Hs.eg.db</span>, keys <span class="op">=</span> <span class="st">"BP"</span>, keytype <span class="op">=</span> <span class="st">"ONTOLOGY"</span>, </span>
+<code class="sourceCode R"><span><span class="va">BP_Id</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Hs.eg.db</span>, keys <span class="op">=</span> <span class="st">"BP"</span>, keytype <span class="op">=</span> <span class="st">"ONTOLOGY"</span>,</span>
 <span>               column <span class="op">=</span> <span class="st">"GO"</span>, multiVals <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu">head</span><span class="op">(</span><span class="va">BP_Id</span><span class="op">)</span></span></code></pre>
 </div>
@@ -1213,7 +1213,7 @@ correspond to every one of them</em>”.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">BPGeneSets</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Hs.eg.db</span>, keys <span class="op">=</span> <span class="va">BP_Id</span>, keytype <span class="op">=</span> <span class="st">"GOALL"</span>, </span>
+<code class="sourceCode R"><span><span class="va">BPGeneSets</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Hs.eg.db</span>, keys <span class="op">=</span> <span class="va">BP_Id</span>, keytype <span class="op">=</span> <span class="st">"GOALL"</span>,</span>
 <span>                    column <span class="op">=</span> <span class="st">"ENTREZID"</span>, multiVals <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span></span></code></pre>
 </div>
 <p>You may have noticed there is a “GO” key column as well a “GOALL”
@@ -1568,7 +1568,7 @@ biology aspect.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resTime</span> <span class="op">&lt;-</span> <span class="fu">DESeq2</span><span class="fu">::</span><span class="fu">results</span><span class="op">(</span><span class="va">dds</span>, contrast <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"Day8"</span>, <span class="st">"Day0"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">timeDE</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="fu">subset</span><span class="op">(</span><span class="va">resTime</span>, </span>
+<span><span class="va">timeDE</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="fu">subset</span><span class="op">(</span><span class="va">resTime</span>,</span>
 <span>                               <span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;</span> <span class="fu">abs</span><span class="op">(</span><span class="va">log2FoldChange</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fu">log2</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span></span>
 <span>                       <span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">timeDEgenes</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">timeDE</span><span class="op">)</span></span>
@@ -1609,8 +1609,8 @@ sets are automatically retrieved and processed from
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">clusterProfiler</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">org.Mm.eg.db</span><span class="op">)</span></span>
-<span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
-<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
+<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                     OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1621,7 +1621,7 @@ sets are automatically retrieved and processed from
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>--&gt; Expected input gene ID: 635253,104884,77782,208084,52535,56420</code></pre>
+<pre class="output" tabindex="0"><code>--&gt; Expected input gene ID: 236904,170472,12144,21939,110816,12914</code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1645,9 +1645,9 @@ genes are in gene symbols. Recall that all valid values for
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
+<code class="sourceCode R"><span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
 <span>                     keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
-<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                     OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span><span class="op">)</span></span>
 <span><span class="va">resTimeGOTable</span> <span class="op">=</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="va">resTimeGO</span><span class="op">)</span></span>
 <span><span class="fu">head</span><span class="op">(</span><span class="va">resTimeGOTable</span><span class="op">)</span></span></code></pre>
@@ -1758,9 +1758,9 @@ table for downstream anlaysis. Second, the meaning of
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
+<code class="sourceCode R"><span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
 <span>                     keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
-<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                     OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
 <span>                     pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                     qvalueCutoff <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -1838,7 +1838,7 @@ mapping)<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">EntrezIDs</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Mm.eg.db</span>, keys <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
+<code class="sourceCode R"><span><span class="va">EntrezIDs</span> <span class="op">=</span> <span class="fu">mapIds</span><span class="op">(</span><span class="va">org.Mm.eg.db</span>, keys <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
 <span>                   keytype <span class="op">=</span> <span class="st">"SYMBOL"</span>, column <span class="op">=</span> <span class="st">"ENTREZID"</span>, multiVals <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -1867,7 +1867,7 @@ frame.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resTimeKEGG</span> <span class="op">=</span> <span class="fu">enrichKEGG</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">EntrezIDs</span>, </span>
+<code class="sourceCode R"><span><span class="va">resTimeKEGG</span> <span class="op">=</span> <span class="fu">enrichKEGG</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">EntrezIDs</span>,</span>
 <span>                         organism <span class="op">=</span> <span class="st">"mmu"</span>,</span>
 <span>                         pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                         qvalueCutoff <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -1979,7 +1979,7 @@ sets should be the same as in the DE genes, so here we choose the
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resTimeHallmark</span> <span class="op">=</span> <span class="fu">enricher</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
+<code class="sourceCode R"><span><span class="va">resTimeHallmark</span> <span class="op">=</span> <span class="fu">enricher</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
 <span>                           TERM2GENE <span class="op">=</span> <span class="va">gene_sets</span>,</span>
 <span>                           pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                           qvalueCutoff <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -2188,18 +2188,18 @@ universe settings.</p>
 <span><span class="co"># all protein-coding genes, ~ 20k genes</span></span>
 <span><span class="va">df2</span> <span class="op">=</span> <span class="fu">ora</span><span class="op">(</span><span class="va">timeDEgenes</span>, <span class="va">HallmarkGeneSets</span>, <span class="fu">rownames</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># all genes in org.Mm.eg.db ~ 70k genes</span></span>
-<span><span class="va">df3</span> <span class="op">=</span> <span class="fu">ora</span><span class="op">(</span><span class="va">timeDEgenes</span>, <span class="va">HallmarkGeneSets</span>, </span>
+<span><span class="va">df3</span> <span class="op">=</span> <span class="fu">ora</span><span class="op">(</span><span class="va">timeDEgenes</span>, <span class="va">HallmarkGeneSets</span>,</span>
 <span>    <span class="fu">keys</span><span class="op">(</span><span class="va">org.Mm.eg.db</span>, keytype <span class="op">=</span> <span class="st">"SYMBOL"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># df1, df2, and df3 are in the same row order, </span></span>
+<span><span class="co"># df1, df2, and df3 are in the same row order,</span></span>
 <span><span class="co"># so we can directly compare them</span></span>
-<span><span class="fu">plot</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">p_value</span>, <span class="va">df2</span><span class="op">$</span><span class="va">p_value</span>, col <span class="op">=</span> <span class="fl">2</span>, pch <span class="op">=</span> <span class="fl">16</span>, </span>
-<span>    xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">p_value</span>, <span class="va">df2</span><span class="op">$</span><span class="va">p_value</span>, col <span class="op">=</span> <span class="fl">2</span>, pch <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>    xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    xlab <span class="op">=</span> <span class="st">"all hallmark genes as universe (p-values)"</span>, ylab <span class="op">=</span> <span class="st">"p-values"</span>,</span>
 <span>    main <span class="op">=</span> <span class="st">"compare universes"</span><span class="op">)</span></span>
 <span><span class="fu">points</span><span class="op">(</span><span class="va">df1</span><span class="op">$</span><span class="va">p_value</span>, <span class="va">df3</span><span class="op">$</span><span class="va">p_value</span>, col <span class="op">=</span> <span class="fl">4</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
 <span><span class="fu">abline</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu">legend</span><span class="op">(</span><span class="st">"topleft"</span>, legend <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"all protein-coding genes as universe"</span>, <span class="st">"all genes as universe"</span><span class="op">)</span>, </span>
+<span><span class="fu">legend</span><span class="op">(</span><span class="st">"topleft"</span>, legend <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"all protein-coding genes as universe"</span>, <span class="st">"all genes as universe"</span><span class="op">)</span>,</span>
 <span>    pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/07-gene-set-analysis-rendered-compare-universe-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>It is very straightforward to see, with a larger universe, there are
@@ -2230,9 +2230,9 @@ that <strong>enrichplot</strong> supports can be found from <a href="https://yul
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">enrichplot</span><span class="op">)</span></span>
-<span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>, </span>
+<span><span class="va">resTimeGO</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEgenes</span>,</span>
 <span>                     keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
-<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span>                     ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                     OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
 <span>                     pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                     qvalueCutoff <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -2390,11 +2390,11 @@ significant gene sets.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">ggplot2</span><span class="op">)</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>, </span>
-<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>, </span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>,</span>
+<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>            fill <span class="op">=</span> <span class="va">DE_Ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_bar</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, </span>
+<span>    <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>,</span>
 <span>        label <span class="op">=</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"%.2e"</span>, <span class="va">p.adjust</span><span class="op">)</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre>
 </div>
@@ -2405,8 +2405,8 @@ to map to the offset to origin, <code>DE_Ratio</code> and
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>, </span>
-<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">zScore</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>,</span>
+<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">zScore</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>            col <span class="op">=</span> <span class="va">DE_Ratio</span>, size <span class="op">=</span> <span class="va">Count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre>
@@ -2427,8 +2427,8 @@ biologically sensible.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span>, </span>
-<span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="op">-</span><span class="fu">log10</span><span class="op">(</span><span class="va">p.adjust</span><span class="op">)</span>, </span>
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="va">resTimeGOTable</span>,</span>
+<span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="op">-</span><span class="fu">log10</span><span class="op">(</span><span class="va">p.adjust</span><span class="op">)</span>,</span>
 <span>        color <span class="op">=</span> <span class="va">DE_Ratio</span>, size <span class="op">=</span> <span class="va">GS_size</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="op">-</span><span class="fu">log10</span><span class="op">(</span><span class="fl">0.01</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"#444444"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2455,9 +2455,9 @@ down-regulated separately.</p>
 <span><span class="va">timeDEup</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="fu">subset</span><span class="op">(</span><span class="va">resTime</span>, <span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">log2FoldChange</span> <span class="op">&gt;</span> <span class="fu">log2</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">timeDEupGenes</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">timeDEup</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">resTimeGOup</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEupGenes</span>, </span>
+<span><span class="va">resTimeGOup</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEupGenes</span>,</span>
 <span>                       keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
-<span>                       ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span>                       ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                       OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
 <span>                       universe <span class="op">=</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>,</span>
 <span>                       pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -2473,9 +2473,9 @@ down-regulated separately.</p>
 <span><span class="va">timeDEdown</span> <span class="op">&lt;-</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="fu">subset</span><span class="op">(</span><span class="va">resTime</span>, <span class="va">padj</span> <span class="op">&lt;</span> <span class="fl">0.05</span> <span class="op">&amp;</span> <span class="va">log2FoldChange</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fu">log2</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">timeDEdownGenes</span> <span class="op">&lt;-</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">timeDEdown</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">resTimeGOdown</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEdownGenes</span>, </span>
+<span><span class="va">resTimeGOdown</span> <span class="op">=</span> <span class="fu">enrichGO</span><span class="op">(</span>gene <span class="op">=</span> <span class="va">timeDEdownGenes</span>,</span>
 <span>                       keyType <span class="op">=</span> <span class="st">"SYMBOL"</span>,</span>
-<span>                       ont <span class="op">=</span> <span class="st">"BP"</span>, </span>
+<span>                       ont <span class="op">=</span> <span class="st">"BP"</span>,</span>
 <span>                       OrgDb <span class="op">=</span> <span class="va">org.Mm.eg.db</span>,</span>
 <span>                       universe <span class="op">=</span> <span class="fu">rownames</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>,</span>
 <span>                       pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -2501,11 +2501,11 @@ be easy to read.</p>
 <span><span class="va">direction</span> <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fu">rep</span><span class="op">(</span><span class="st">"up"</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu">rep</span><span class="op">(</span><span class="st">"down"</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="fu">rbind</span><span class="op">(</span><span class="va">resTimeGOupTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>,</span>
 <span>             <span class="va">resTimeGOdownTable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span><span class="op">)</span>,</span>
-<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>        <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, y <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">Description</span>, levels <span class="op">=</span> <span class="fu">rev</span><span class="op">(</span><span class="va">Description</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>            fill <span class="op">=</span> <span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">geom_bar</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"up"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"down"</span> <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>    <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>, </span>
+<span>    <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">log2_Enrichment</span>,</span>
 <span>        label <span class="op">=</span> <span class="fu">sprintf</span><span class="op">(</span><span class="st">"%.2e"</span>, <span class="va">p.adjust</span><span class="op">)</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ylab</span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span></code></pre>
 </div>
@@ -2530,7 +2530,7 @@ visualization.</p>
 <!-- Carpentry CI cannot install RcppParallel which is indirectly depended by simplifyenrichment,
     so the plot is not generated on the fly.
  -->
-<figure><img src="../fig/simplifyEnrichment.png" class="figure mx-auto d-block"></figure><div id="further-reading-5" class="callout">
+<figure><img src="../fig/simplifyEnrichment.png" alt="simpligyGO output figures." class="figure mx-auto d-block"></figure><div id="further-reading-5" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
