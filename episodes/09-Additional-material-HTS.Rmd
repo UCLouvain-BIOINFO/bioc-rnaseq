@@ -412,7 +412,7 @@ Loading a BAM file creates 3 associated tracks:
 
 Now comes the quantification step. It can be performed with several
 tools such as [htseq-count](https://pypi.org/project/HTSeq/) or
-[FeatureCounts](https://bioinf.wehi.edu.au/featureCounts/).  We will
+[FeatureCounts](https://subread.sourceforge.net/featureCounts.html).  We will
 describe the latter as it runs much faster. It was developed for
 counting reads to genomic features such as genes, exons, promoters and
 genomic bins.  FeatureCounts takes as input SAM/BAM files and an
