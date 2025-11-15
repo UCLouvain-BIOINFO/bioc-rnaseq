@@ -34,7 +34,7 @@ DE genes could suggest that the corresponding biological process or pathway is
 significantly affected.
 
 There are a huge amount of methods available for GSEA analysis. In this
-episode, we will focus on two widely used method: the over-representation analysis
+episode, we will focus on two widely used methods: the over-representation analysis
 (ORA) and the Gene set enrichment analysis (GSEA).
 
 
@@ -281,7 +281,7 @@ as our **genes of interest** or **DE genes**.
 #### Step2: Counting
 
 For each biological category, we can count how many genes from our DE genes
-are in that category, and ow many are not.
+are in that category, and how many are not.
 
 Let's say we want to test the enrichment of the `GOBP_LEUKOCYTE_CHEMOTAXIS` geneset.
 
@@ -348,7 +348,7 @@ knitr::kable(count_mat)
 #### Step3: Statistical test
 
 We can now apply a Fisher’s exact (or hypergeometric test) that will test whether
-we can identify a statistically enrichment of DE genes in the GO category.
+there is a significant enrichment of DE genes in the GO term.
 
 ```{r}
 fisher.test(count_mat, alternative = "greater")
@@ -364,7 +364,7 @@ many packages that are available.
 
 Here, we will use the
 [clusterProfiler package](https://yulab-smu.top/clusterProfiler-book/)
-to test if any GO terms from the Biological Process are enriched among our DE genes.
+to test if any GO terms from the Biological Process is enriched among our DE genes.
 
 ```{r}
 # Define our DE genes
@@ -375,11 +375,11 @@ genes_DE <- res_tbl$gene[res_tbl$padj <= padj_thr &
                            abs(res_tbl$log2FoldChange) >= log2FC_thr]
 
 ORA_res <- enricher(gene          = genes_DE,
-                 universe      = geneList,
-                 pAdjustMethod = "BH",
-                 qvalueCutoff = 1,
-                 pvalueCutoff = 1,
-                 TERM2GENE     = GO_BP)
+                    universe      = geneList,
+                    pAdjustMethod = "BH",
+                    qvalueCutoff = 1,
+                    pvalueCutoff = 1,
+                    TERM2GENE     = GO_BP)
 
 ORA_res_tbl <- as_tibble(ORA_res) %>% filter(p.adjust < 0.05)
 ORA_res_tbl %>%
@@ -454,8 +454,7 @@ Setting this threshold might have an effect on the results.
 
 ## Challenge:
 
-Try setting different DE genes and check if, in the cases above, this has and
-effect on the GO terms of interest.
+Test a different threshold to define the group of 'DE genes' and check if, in the cases above, this has and effect on the GO terms of interest.
 
 
 :::::::::::::::::::::::: solution
@@ -506,7 +505,7 @@ plot(Venn(geneset_list))
 
 ## Challenge:
 
-Repeat the ORA analysis using time the Hallmarks geneset
+Repeat the ORA analysis using this time the Hallmarks genesets.
 
 
 :::::::::::::::::::::::: solution
@@ -538,7 +537,7 @@ ORA_hallmarks_tbl %>%
 
 Gene set enrichment analysis refers to a broad family of tests. Here, we will define the principles based on [Subramanian et al. 2005](https://pubmed.ncbi.nlm.nih.gov/16199517/) keeping in mind that the exact implementation will differ in different tools.
 
-Gene Set Enrichment Analysis (GSEA) is a statistical method used to determine whether predefined sets of genes (for example, genes belonging to a biological pathway or GO term) show systematic differences in expression between two biological conditions. Instead of focusing only on individual genes, GSEA evaluates the **collective behavior of gene groups**.
+Gene Set Enrichment Analysis (GSEA) is a statistical method used to determine whether predefined sets of genes (for example, genes belonging to a GO term) show systematic differences in expression between two biological conditions. Instead of focusing only on individual genes, GSEA evaluates the **collective behavior of gene groups**.
 
 The major advantage of GSEA approaches is that they don’t rely on defining DE genes.
 
