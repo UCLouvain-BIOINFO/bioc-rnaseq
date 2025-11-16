@@ -106,7 +106,7 @@ The null hypothesis is that there is no difference across the sample groups,
 which is the same as saying that the $\beta_1$ = 0. 
 
 - $H_0$: $\beta_1 = 0$    (the logFC = 0)
-- $H_1$: $\beta_1 \neq 0$  (the logFC \neq 0)
+- $H_1$: $\beta_1 \neq 0$  (the logFC $\neq$ 0)
 
 
 ### Example
@@ -121,7 +121,7 @@ download.file(url = "https://github.com/carpentries-incubator/bioc-intro/raw/mai
               destfile = "data/rnaseq.csv")
 ```
 
-```{r, eval=TRUE, purl=TRUE}
+```{r, eval=TRUE, purl=TRUE, message=FALSE, warning = F}
 rna <- read_csv("data/rnaseq.csv")
 rna1 <- rna %>% 
   filter(gene %in% c("Asl"), time %in% c(0,8), sex == "Female") %>% 
