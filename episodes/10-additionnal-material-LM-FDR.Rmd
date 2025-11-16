@@ -127,7 +127,7 @@ rna1 <- rna %>%
   filter(gene %in% c("Asl"), time %in% c(0,8), sex == "Female") %>% 
   mutate(expression_log = log(expression)) %>% 
   select(gene, sample, expression_log, time, infection, sex) %>% 
-  arrange(gene, infection) 
+  arrange(infection) 
 ```
 
 Let's also convert the `infection` column into a factor, in order to set the `NonInfected` 
@@ -262,7 +262,7 @@ rna2 <- rna %>%
   filter(gene %in% c("Ddx3x"), time %in% c(0,8)) %>% 
   mutate(expression_log = log(expression)) %>% 
   select(gene, sample, expression_log, time, infection, sex) %>% 
-  arrange(gene, infection) 
+  arrange(infection) 
 
 #set the `NonInfected` condition as the reference level. 
 rna2$infection <- factor(rna2$infection, levels = c("NonInfected", "InfluenzaA"))
@@ -394,6 +394,77 @@ in the different samples:
 - In `treated cells B`: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$y$ = $\beta_0$ + *Treatment* + *Cell* + *Treatment.Cell* 
 
 
+
+
+
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Not let's consider the `exp` dataset. Fit a linear model with an interaction between 
+condition and cell.
+
+Interprete the results.
+
+```{r eval=FALSE, include=FALSE}
+exp <- tibble(gene = "geneX",
+       cell = c(rep("cellA", 6), rep("cellB", 6)),
+       condition = rep(c(rep("CTL", 3), rep("treated", 3)), 2),
+       expression_log = c(rnorm(3, 10, 0.3), rnorm(3, 12, 0.3), rnorm(3, 10, 0.3), rnorm(3, 8, 0.3)))
+```
+
+
+```{r}
+exp <- structure(list(
+  gene = c("geneX", "geneX", "geneX", "geneX", "geneX", "geneX", "geneX", 
+           "geneX", "geneX", "geneX", "geneX", "geneX"), 
+  cell = c("cellA", "cellA", "cellA", "cellA", "cellA", "cellA", "cellB", 
+           "cellB", "cellB", "cellB", "cellB", "cellB"), 
+  condition = c("CTL", "CTL", "CTL", "treated", "treated", "treated", 
+                "CTL", "CTL", "CTL", "treated", "treated", "treated"), 
+  expression_log = c(10.3490970690873, 10.1575190636127, 10.4868623968153, 
+                     11.6188348660566, 12.7138479539555, 12.6343779570465, 
+                     10.0898526422682, 9.70416016607923, 10.4827957238796, 
+                     7.79590981240408, 8.18400846690037, 8.17157903656578)), 
+  class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -12L))
+
+exp
+```
+
+
+
+:::::::::::::::::::::::: solution
+
+```{r}
+mod4 <- lm(expression_log ~ condition * cell, data = exp)
+summary(mod4)
+```
+
+The interaction term is significant. This indicates that the *Treatement effect* 
+is significantly **different** in Cells A and cells B.
+
+And indeed looking at the count values, we can see that the treatment increases
+the gene expression level in cells A, but it has an opposite effect in cells B.
+
+```{r echo=FALSE}
+exp %>% 
+  ggplot(aes(x = condition, y = expression_log)) +
+  geom_jitter(size = 3, aes(color = cell)) +
+  geom_boxplot(alpha = 0) +
+  facet_wrap(~ cell)+
+  theme(legend.position = "bottom")
+```
+
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ### Challenge: 
@@ -419,8 +490,21 @@ the coefficient `sexMale`, representing the *Sex Effect*, are both significant.
 But the interaction term is not. This indicates that the *Infection Effect* is not
 significantly different between males and females
 
+This is not surprising because the effect is consistent in both sexes.
+
+```{r echo=FALSE}
+rna2 %>% 
+  ggplot(aes(x = infection, y = expression_log)) +
+  geom_jitter(size = 3, aes(color = sex)) +
+  geom_boxplot(alpha = 0) +
+  facet_wrap(~ sex)+
+  theme(legend.position = "bottom")
+```
+
+
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 
 
