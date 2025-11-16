@@ -119,7 +119,7 @@ rna1 <- rna %>%
   filter(gene %in% c("Asl"), time %in% c(0,8), sex == "Female") %>% 
   mutate(expression_log = log(expression)) %>% 
   select(gene, sample, expression_log, time, infection, sex) %>% 
-  arrange(gene, infection) 
+  arrange(infection) 
 ```
 
 Let's also convert the `infection` column into a factor, in order to set the `NonInfected` 
@@ -287,7 +287,7 @@ rna2 <- rna %>%
   filter(gene %in% c("Ddx3x"), time %in% c(0,8)) %>% 
   mutate(expression_log = log(expression)) %>% 
   select(gene, sample, expression_log, time, infection, sex) %>% 
-  arrange(gene, infection) 
+  arrange(infection) 
 
 #set the `NonInfected` condition as the reference level. 
 rna2$infection <- factor(rna2$infection, levels = c("NonInfected", "InfluenzaA"))
@@ -464,6 +464,108 @@ in the different samples:
 - In `treated cells B`: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$y$ = $\beta_0$ + *Treatment* + *Cell* + *Treatment.Cell* 
 
 
+
+
+
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Not let's consider the `exp` dataset. Fit a linear model with an interaction between 
+condition and cell.
+
+Interprete the results.
+
+
+
+
+
+``` r
+exp <- structure(list(
+  gene = c("geneX", "geneX", "geneX", "geneX", "geneX", "geneX", "geneX", 
+           "geneX", "geneX", "geneX", "geneX", "geneX"), 
+  cell = c("cellA", "cellA", "cellA", "cellA", "cellA", "cellA", "cellB", 
+           "cellB", "cellB", "cellB", "cellB", "cellB"), 
+  condition = c("CTL", "CTL", "CTL", "treated", "treated", "treated", 
+                "CTL", "CTL", "CTL", "treated", "treated", "treated"), 
+  expression_log = c(10.3490970690873, 10.1575190636127, 10.4868623968153, 
+                     11.6188348660566, 12.7138479539555, 12.6343779570465, 
+                     10.0898526422682, 9.70416016607923, 10.4827957238796, 
+                     7.79590981240408, 8.18400846690037, 8.17157903656578)), 
+  class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -12L))
+
+exp
+```
+
+``` output
+# A tibble: 12 × 4
+   gene  cell  condition expression_log
+   <chr> <chr> <chr>              <dbl>
+ 1 geneX cellA CTL                10.3 
+ 2 geneX cellA CTL                10.2 
+ 3 geneX cellA CTL                10.5 
+ 4 geneX cellA treated            11.6 
+ 5 geneX cellA treated            12.7 
+ 6 geneX cellA treated            12.6 
+ 7 geneX cellB CTL                10.1 
+ 8 geneX cellB CTL                 9.70
+ 9 geneX cellB CTL                10.5 
+10 geneX cellB treated             7.80
+11 geneX cellB treated             8.18
+12 geneX cellB treated             8.17
+```
+
+
+
+:::::::::::::::::::::::: solution
+
+
+``` r
+mod4 <- lm(expression_log ~ condition * cell, data = exp)
+summary(mod4)
+```
+
+``` output
+
+Call:
+lm(formula = expression_log ~ condition * cell, data = exp)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.70352 -0.19388  0.06951  0.19478  0.39149 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                 10.3312     0.2237  46.188 5.33e-11 ***
+conditiontreated             1.9912     0.3163   6.295 0.000234 ***
+cellcellB                   -0.2389     0.3163  -0.755 0.471771    
+conditiontreated:cellcellB  -4.0330     0.4473  -9.015 1.83e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3874 on 8 degrees of freedom
+Multiple R-squared:  0.9581,	Adjusted R-squared:  0.9424 
+F-statistic: 60.99 on 3 and 8 DF,  p-value: 7.452e-06
+```
+
+The interaction term is significant. This indicates that the *Treatement effect* 
+is significantly **different** in Cells A and cells B.
+
+And indeed looking at the count values, we can see that the treatment increases
+the gene expression level in cells A, but it has an opposite effect in cells B.
+
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ### Challenge: 
@@ -513,8 +615,14 @@ the coefficient `sexMale`, representing the *Sex Effect*, are both significant.
 But the interaction term is not. This indicates that the *Infection Effect* is not
 significantly different between males and females
 
+This is not surprising because the effect is consistent in both sexes.
+
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+
+
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 
 
@@ -686,7 +794,7 @@ fig2 <- res_long %>%
 fig1 / fig2
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::
 
@@ -708,7 +816,7 @@ res %>%
   geom_histogram(binwidth = 0.05, boundary = 0, color = "gray")
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
 
 
 :::::::::::::::::::::::::::::::::
@@ -755,7 +863,7 @@ exp_modified %>%
   geom_density(alpha = .3)
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-28-1.png" style="display: block; margin: auto;" />
 
 Let's run a t-test on this new dataset:
 
@@ -818,7 +926,7 @@ h3 <- res_modified %>%
 h1 + h2 + h3
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
 
 The figure on the right illustrates the principle behind the FDR adjustment. 
 The False discovery rate (FDR) is the expected proportion of false positives 
@@ -849,11 +957,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1053
-    TRUE      0   832
+    FALSE 18115  1057
+    TRUE      0   828
 ```
 
-Only 832 were found to be significant after FDR correction.
+Only 828 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
