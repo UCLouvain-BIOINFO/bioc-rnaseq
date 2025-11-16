@@ -316,7 +316,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Additional material: GSEA</h1>
-        <p> Last updated on 2025-11-13 |
+        <p> Last updated on 2025-11-16 |
 
         <a href="https://github.com/carpentries-incubator/bioc-rnaseq/edit/main/episodes/12-GSEA.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -363,7 +363,7 @@ gene set has a specific biological meaning. A geneset significantly
 enrichiched among DE genes could suggest that the corresponding
 biological process or pathway is significantly affected.</p>
 <p>There are a huge amount of methods available for GSEA analysis. In
-this episode, we will focus on two widely used method: the
+this episode, we will focus on two widely used methods: the
 over-representation analysis (ORA) and the Gene set enrichment analysis
 (GSEA).</p>
 </section><section><h2 class="section-heading" id="genesets">GeneSets<a class="anchor" aria-label="anchor" href="#genesets"></a></h2>
@@ -578,7 +578,7 @@ our <strong>genes of interest</strong> or <strong>DE genes</strong>.</p>
 <div class="section level4">
 <h4 id="step2-counting">Step2: Counting<a class="anchor" aria-label="anchor" href="#step2-counting"></a></h4>
 <p>For each biological category, we can count how many genes from our DE
-genes are in that category, and ow many are not.</p>
+genes are in that category, and how many are not.</p>
 <p>Let’s say we want to test the enrichment of the
 <code>GOBP_LEUKOCYTE_CHEMOTAXIS</code> geneset.</p>
 <figure><img src="../fig/12-GSEA-rendered-unnamed-chunk-8-1.png" width="40%" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We will count the number of DE genes from that are in
@@ -597,8 +597,8 @@ not.</p>
 <div class="section level4">
 <h4 id="step3-statistical-test">Step3: Statistical test<a class="anchor" aria-label="anchor" href="#step3-statistical-test"></a></h4>
 <p>We can now apply a Fisher’s exact (or hypergeometric test) that will
-test whether we can identify a statistically enrichment of DE genes in
-the GO category.</p>
+test whether there is a significant enrichment of DE genes in the GO
+term.</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -627,7 +627,7 @@ odds ratio
 <p>In practice, the analysis presented above can be executed using any
 of the very many packages that are available.</p>
 <p>Here, we will use the <a href="https://yulab-smu.top/clusterProfiler-book/" class="external-link">clusterProfiler
-package</a> to test if any GO terms from the Biological Process are
+package</a> to test if any GO terms from the Biological Process is
 enriched among our DE genes.</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -641,11 +641,11 @@ enriched among our DE genes.</p>
 <span>                           <span class="fu">abs</span><span class="op">(</span><span class="va">res_tbl</span><span class="op">$</span><span class="va">log2FoldChange</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="va">log2FC_thr</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">ORA_res</span> <span class="op">&lt;-</span> <span class="fu">enricher</span><span class="op">(</span>gene          <span class="op">=</span> <span class="va">genes_DE</span>,</span>
-<span>                 universe      <span class="op">=</span> <span class="va">geneList</span>,</span>
-<span>                 pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
-<span>                 qvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                 pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                 TERM2GENE     <span class="op">=</span> <span class="va">GO_BP</span><span class="op">)</span></span>
+<span>                    universe      <span class="op">=</span> <span class="va">geneList</span>,</span>
+<span>                    pAdjustMethod <span class="op">=</span> <span class="st">"BH"</span>,</span>
+<span>                    qvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                    pvalueCutoff <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                    TERM2GENE     <span class="op">=</span> <span class="va">GO_BP</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ORA_res_tbl</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">ORA_res</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">filter</span><span class="op">(</span><span class="va">p.adjust</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="va">ORA_res_tbl</span> <span class="op">%&gt;%</span></span>
@@ -746,8 +746,9 @@ results.</p>
 <div id="challenge-2" class="callout-inner">
 <h3 class="callout-title">Challenge:</h3>
 <div class="callout-content">
-<p>Try setting different DE genes and check if, in the cases above, this
-has and effect on the GO terms of interest.</p>
+<p>Test a different threshold to define the group of ‘DE genes’ and
+check if, in the cases above, this has and effect on the GO terms of
+interest.</p>
 </div>
 </div>
 </div>
@@ -830,7 +831,7 @@ has and effect on the GO terms of interest.</p>
 <div id="challenge-3" class="callout-inner">
 <h3 class="callout-title">Challenge:</h3>
 <div class="callout-content">
-<p>Repeat the ORA analysis using time the Hallmarks geneset</p>
+<p>Repeat the ORA analysis using this time the Hallmarks genesets.</p>
 </div>
 </div>
 </div>
@@ -891,10 +892,10 @@ al. 2005</a> keeping in mind that the exact implementation will differ
 in different tools.</p>
 <p>Gene Set Enrichment Analysis (GSEA) is a statistical method used to
 determine whether predefined sets of genes (for example, genes belonging
-to a biological pathway or GO term) show systematic differences in
-expression between two biological conditions. Instead of focusing only
-on individual genes, GSEA evaluates the <strong>collective behavior of
-gene groups</strong>.</p>
+to a GO term) show systematic differences in expression between two
+biological conditions. Instead of focusing only on individual genes,
+GSEA evaluates the <strong>collective behavior of gene
+groups</strong>.</p>
 <p>The major advantage of GSEA approaches is that they don’t rely on
 defining DE genes.</p>
 <div class="section level4">
@@ -1115,8 +1116,8 @@ methods?</p></li>
   "url": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/12-GSEA.html",
   "identifier": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/12-GSEA.html",
   "dateCreated": "2020-09-15",
-  "dateModified": "2025-11-13",
-  "datePublished": "2025-11-13"
+  "dateModified": "2025-11-16",
+  "datePublished": "2025-11-16"
 }
 
   </script><script>
