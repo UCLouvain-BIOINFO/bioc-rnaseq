@@ -23,7 +23,7 @@ read count matrix that will be used for downstream analysis.
 
 
 
-
+> *This episode is based on the course [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
 
 ## RNA-seq library preparation
 

@@ -19,7 +19,7 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-*Parts of this chapter are based on the course [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/).*
+> *Parts of this episode is based on the course [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/).*
 
 
 

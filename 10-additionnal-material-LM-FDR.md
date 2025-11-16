@@ -22,8 +22,8 @@ exercises: 0
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-*Parts of this chapter are based on the courses [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/)* 
-*and [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
+> *Parts of this chapter are based on the courses [WSBIM1322](https://uclouvain-cbio.github.io/WSBIM1322/)* 
+> *and [Omics data analysis](https://uclouvain-cbio.github.io/WSBIM2122/).*
 
 
 
@@ -100,7 +100,7 @@ The null hypothesis is that there is no difference across the sample groups,
 which is the same as saying that the $\beta_1$ = 0. 
 
 - $H_0$: $\beta_1 = 0$    (the logFC = 0)
-- $H_1$: $\beta_1 \neq 0$  (the logFC \neq 0)
+- $H_1$: $\beta_1 \neq 0$  (the logFC $\neq$ 0)
 
 
 ### Example
@@ -115,20 +115,6 @@ female mice at time 0 and 8.
 
 ``` r
 rna <- read_csv("data/rnaseq.csv")
-```
-
-``` output
-Rows: 32428 Columns: 19
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (14): gene, sample, organism, sex, infection, strain, tissue, product, e...
-dbl  (5): expression, age, time, mouse, ENTREZID
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
-
-``` r
 rna1 <- rna %>% 
   filter(gene %in% c("Asl"), time %in% c(0,8), sex == "Female") %>% 
   mutate(expression_log = log(expression)) %>% 
@@ -863,11 +849,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1056
-    TRUE      0   829
+    FALSE 18115  1053
+    TRUE      0   832
 ```
 
-Only 829 were found to be significant after FDR correction.
+Only 832 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
