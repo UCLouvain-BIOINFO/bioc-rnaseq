@@ -277,10 +277,10 @@ tiny_dataset <- structure(list(
                 "Treated_2", "Treated_3", "Treated_4", "Treated_5"))
 ```
 
-
-```{r echo=TRUE}
+```{r}
 tiny_dataset
 ```
+
 
 
 This table is not too big, so by quickly inspecting it by eye, we can see that 
