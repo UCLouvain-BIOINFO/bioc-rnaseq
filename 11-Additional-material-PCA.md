@@ -218,22 +218,10 @@ Proportion of Variance 0.655 0.254 0.08936 0.00163 0.00003
 Cumulative Proportion  0.655 0.909 0.99834 0.99997 1.00000
 ```
 
-These values can also be computed from the `sdev` slot of the prcomp output that 
-contains the standard deviations along the respective PCs. 
-From these, we can compute the variances and the percentages of variance explained 
-by the individual PCs.
 
 
 
-``` r
-var <- pca$sdev^2
-pve <- var/sum(var)
-pve
-```
 
-``` output
-[1] 6.549924e-01 2.539896e-01 8.935938e-02 1.629726e-03 2.890658e-05
-```
 
 
 #### PCA's coordinates
@@ -269,9 +257,7 @@ as_tibble(pca$x, rownames = "sample") %>%
   mutate(group = sub(pattern = "_.*", x = sample, replacement = '')) %>% 
   ggplot(aes(x = PC1, y = PC2, color = group)) +
   geom_point(size = 3) +
-  theme(aspect.ratio = .4) +
-  xlab(paste0("PC1: ", round(pve[1] * 100), " % of variance")) +
-  ylab(paste0("PC2: ", round(pve[2] * 100), " % of variance")) 
+  theme(aspect.ratio = .4) 
 ```
 
 <img src="fig/11-Additional-material-PCA-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
