@@ -328,13 +328,16 @@ A summary of prcomp output shows that
 summary(pca)
 ```
 
-These values can also be computed from the `sdev` slot of the prcomp output that 
-contains the standard deviations along the respective PCs. 
-From these, we can compute the variances and the percentages of variance explained 
-by the individual PCs.
 
 
-```{r echo=TRUE}
+
+```{r eval=FALSE, include=FALSE}
+# These values can also be computed from the `sdev` slot of the prcomp output that 
+# contains the standard deviations along the respective PCs. 
+# From these, we can compute the variances and the percentages of variance explained 
+# by the individual PCs.
+
+
 var <- pca$sdev^2
 pve <- var/sum(var)
 pve
@@ -358,9 +361,7 @@ as_tibble(pca$x, rownames = "sample") %>%
   mutate(group = sub(pattern = "_.*", x = sample, replacement = '')) %>% 
   ggplot(aes(x = PC1, y = PC2, color = group)) +
   geom_point(size = 3) +
-  theme(aspect.ratio = .4) +
-  xlab(paste0("PC1: ", round(pve[1] * 100), " % of variance")) +
-  ylab(paste0("PC2: ", round(pve[2] * 100), " % of variance")) 
+  theme(aspect.ratio = .4) 
 ```
 
 This PCA is a representation in 2 dimensions (PC1 and PC2) of our 5-dimensions 
