@@ -129,7 +129,6 @@ tiny_dataset <- structure(list(
 ```
 
 
-
 ``` r
 tiny_dataset
 ```
@@ -147,6 +146,7 @@ Treated_3    29   803  1002   499    50
 Treated_4    30  1070   989   497    51
 Treated_5    30   953  1013   496    50
 ```
+
 
 
 This table is not too big, so by quickly inspecting it by eye, we can see that 

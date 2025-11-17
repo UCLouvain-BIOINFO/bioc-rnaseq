@@ -670,31 +670,8 @@ exp
 ```
 
 
+Let's apply a t.test on all these genes 
 
-
-Let's apply a t.test on one of these genes 
-
-
-``` r
-n <- 57
-t.test(exp[n, c("A1", "A2", "A3")], exp[n, c("B1", "B2", "B3")])
-```
-
-``` output
-
-	Welch Two Sample t-test
-
-data:  exp[n, c("A1", "A2", "A3")] and exp[n, c("B1", "B2", "B3")]
-t = 0.51756, df = 2.3508, p-value = 0.6494
-alternative hypothesis: true difference in means is not equal to 0
-95 percent confidence interval:
- -0.849086  1.121633
-sample estimates:
-mean of x mean of y 
- 4.575339  4.439066 
-```
-
-Now, let's apply the t.test on all genes
 
 
 ``` r
@@ -730,9 +707,47 @@ res
 - How many significant genes did we obtained ? Which genes are of possible
 biological interest?
 
+:::::::::::::::::::::::: solution
+
+
+
+``` r
+table(res$pval < 0.05)
+```
+
+``` output
+
+FALSE  TRUE 
+19324   676 
+```
+
+``` r
+res %>% filter(pval < 0.05) %>% 
+  arrange(pval)
+```
+
+``` output
+# A tibble: 676 × 8
+   Gene         A1    A2    A3    B1    B2    B3      pval
+   <chr>     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>     <dbl>
+ 1 Gene13793  4.41  4.38  4.42  4.75  4.74  4.73 0.0000613
+ 2 Gene35     4.47  4.45  4.42  4.79  4.75  4.79 0.000104 
+ 3 Gene5006   4.79  4.78  4.75  4.56  4.59  4.57 0.000194 
+ 4 Gene8102   4.31  4.30  4.35  4.60  4.67  4.64 0.000258 
+ 5 Gene11686  4.58  4.60  4.61  4.77  4.74  4.75 0.000266 
+ 6 Gene18641  4.35  4.42  4.35  4.78  4.70  4.78 0.000432 
+ 7 Gene1936   4.47  4.54  4.49  4.79  4.86  4.86 0.000437 
+ 8 Gene14972  4.07  4.15  4.20  4.67  4.55  4.68 0.000963 
+ 9 Gene3211   4.74  4.81  4.75  4.38  4.30  4.42 0.00122  
+10 Gene10421  4.44  4.48  4.47  4.56  4.59  4.57 0.00153  
+# ℹ 666 more rows
+```
+
+:::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-The data above have been generated with the rnorm function for all samples.
+The data above have been generated with the `rnorm()` function for all samples.
 
 This is the code that generated the data:
 
@@ -757,44 +772,9 @@ exp <- as_tibble(exp, rownames = "Gene")
 
 :::::::::::::::::::::::: solution
 
-
-``` r
-table(res$pval < 0.05)
-```
-
-``` output
-
-FALSE  TRUE 
-19324   676 
-```
-
-``` r
-sign_genes <- res %>% filter(pval < 0.05) 
-unsign_genes <- res %>% filter(pval > 0.05) 
-
-res_long <- res %>% 
-  pivot_longer(names_to = "sample", values_to = "expression", -c(Gene, pval)) %>% 
-  mutate(group = substr(sample, 1, 1)) 
-
-fig1 <- res_long %>% 
-  ggplot(aes(x = expression, fill = group, color = group)) +
-  geom_density(alpha = .3) +
-  geom_point(data = res_long %>% filter(Gene == unsign_genes$Gene[1]),
-             aes(x = expression, y = 0, color = group), size = 3) +
-  ggtitle("Gene with a pval > 0.05")
+A pvalue of 0.05 means that there is only 5% chance of getting this data if no real difference existed (if the null hypothesis was really true). In other words, choosing a cut off of 0.05 means there is 5% chance that the wrong decision is made (resulting in a false positive).
 
 
-fig2 <- res_long %>% 
-  ggplot(aes(x = expression, fill = group, color = group)) +
-  geom_density(alpha = .3) +
-  geom_point(data = res_long %>% filter(Gene == sign_genes$Gene[1]),
-             aes(x = expression, y = 0, color = group), size = 3) +
-  ggtitle("Gene with a pval < 0.05")
-
-fig1 / fig2
-```
-
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::
 
@@ -825,22 +805,15 @@ res %>%
 
 
 
-[This xkcd cartoon](https://xkcd.com/882/) humorously illustrates the multiple 
-testing issue by depicting scientists testing whether eating jelly beans causes acne.
 
 
-
-<div class="figure" style="text-align: center">
-<img src="./fig/jellybeans.png" alt="Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/)." width="635" />
-<p class="caption">Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/).</p>
-</div>
 
 
 
 Now, let's slightly modify our simulated expression data.
 
 In a typical RNA-seq experiment, we may test around 20,000 genes, but only a 
-fraction of them are usually truly differentially expressed. We could imagine 
+fraction of them are expected to be truly differentially expressed. We could imagine 
 a drug treatment that would modify the expression of about 1000 genes, but that 
 would have no impact on the other ones. 
 
@@ -856,14 +829,25 @@ exp_modified[1:1000, c("B1", "B2", "B3")] <- log(matrix(rnorm(1000*3, mean = 300
 exp_modified <- exp_modified %>% 
   mutate(DE = c(rep(TRUE, 1000), rep(FALSE, 19000)))
 
-exp_modified %>% 
-  pivot_longer(names_to = "sample", values_to = "expression", -c(Gene, DE)) %>% 
-  mutate(group = substr(sample, 1, 1)) %>% 
-  ggplot(aes(x = expression, fill = group, color = group)) + 
-  geom_density(alpha = .3)
+exp_modified
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-28-1.png" style="display: block; margin: auto;" />
+``` output
+# A tibble: 20,000 × 8
+   Gene      A1    A2    A3    B1    B2    B3 DE   
+   <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>
+ 1 Gene1   4.72  4.89  4.51  5.68  5.74  5.68 TRUE 
+ 2 Gene2   4.61  4.96  4.58  5.67  5.58  5.88 TRUE 
+ 3 Gene3   4.75  4.70  4.75  5.72  5.64  5.70 TRUE 
+ 4 Gene4   4.83  4.83  4.43  5.80  5.61  5.83 TRUE 
+ 5 Gene5   4.68  4.33  4.84  5.70  5.67  5.67 TRUE 
+ 6 Gene6   4.57  4.74  4.68  5.58  5.76  5.73 TRUE 
+ 7 Gene7   4.68  4.47  4.50  5.66  5.62  5.65 TRUE 
+ 8 Gene8   4.59  4.81  4.44  5.66  5.80  5.68 TRUE 
+ 9 Gene9   4.53  4.84  4.51  5.80  5.63  5.82 TRUE 
+10 Gene10  4.74  4.09  4.61  5.63  5.70  5.55 TRUE 
+# ℹ 19,990 more rows
+```
 
 Let's run a t-test on this new dataset:
 
@@ -891,40 +875,6 @@ FALSE  TRUE
 - What about the histogram of all p-values?
 
 :::::::::::::::::::::::: solution
-
-
-``` r
-h1 <- res_modified %>% filter(DE) %>% 
-  ggplot(aes(x = pval)) + 
-  geom_histogram(binwidth = 0.05, boundary = 0) +
-  xlim(0, 1) +
-  ylim(0, 1500) +
-  ggtitle("Ho is FALSE")+
-  theme_bw() +
-  theme(aspect.ratio = 1,
-        panel.grid = element_blank()) 
-
-h2 <- res_modified %>% filter(!DE) %>% 
-  ggplot(aes(x = pval)) + 
-  geom_histogram(binwidth = 0.05, boundary = 0) +
-  xlim(0, 1) +
-  ylim(0, 1500) +
-  ggtitle("Ho is TRUE") +
-  theme_bw() +
-  theme(aspect.ratio = 1,
-        panel.grid = element_blank()) 
-
-h3 <- res_modified %>% 
-  ggplot(aes(x = pval)) + 
-  geom_histogram(binwidth = 0.05, boundary = 0) +
-  geom_hline(yintercept = 950, color = "red", lwd = 2) +
-  ggtitle("All genes") +
-  theme_bw() +
-  theme(aspect.ratio = 1,
-        panel.grid = element_blank()) 
-
-h1 + h2 + h3
-```
 
 <img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
 
@@ -957,11 +907,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1057
-    TRUE      0   828
+    FALSE 18115  1052
+    TRUE      0   833
 ```
 
-Only 828 were found to be significant after FDR correction.
+Only 833 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
