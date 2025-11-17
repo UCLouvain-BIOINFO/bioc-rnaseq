@@ -543,16 +543,8 @@ exp
 ```
 
 
+Let's apply a t.test on all these genes 
 
-
-Let's apply a t.test on one of these genes 
-
-```{r}
-n <- 57
-t.test(exp[n, c("A1", "A2", "A3")], exp[n, c("B1", "B2", "B3")])
-```
-
-Now, let's apply the t.test on all genes
 
 ```{r}
 res <- exp %>% 
@@ -570,9 +562,20 @@ res
 - How many significant genes did we obtained ? Which genes are of possible
 biological interest?
 
+:::::::::::::::::::::::: solution
+
+
+```{r}
+table(res$pval < 0.05)
+res %>% filter(pval < 0.05) %>% 
+  arrange(pval)
+```
+
+:::::::::::::::::::::::::::::::::
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-The data above have been generated with the rnorm function for all samples.
+The data above have been generated with the `rnorm()` function for all samples.
 
 This is the code that generated the data:
 
@@ -596,8 +599,9 @@ exp <- as_tibble(exp, rownames = "Gene")
 
 :::::::::::::::::::::::: solution
 
-```{r}
-table(res$pval < 0.05)
+A pvalue of 0.05 means that there is only 5% chance of getting this data if no real difference existed (if the null hypothesis was really true). In other words, choosing a cut off of 0.05 means there is 5% chance that the wrong decision is made (resulting in a false positive).
+
+```{r eval=FALSE, include=FALSE}
 sign_genes <- res %>% filter(pval < 0.05) 
 unsign_genes <- res %>% filter(pval > 0.05) 
 
@@ -610,15 +614,14 @@ fig1 <- res_long %>%
   geom_density(alpha = .3) +
   geom_point(data = res_long %>% filter(Gene == unsign_genes$Gene[1]),
              aes(x = expression, y = 0, color = group), size = 3) +
-  ggtitle("Gene with a pval > 0.05")
-
+  ggtitle(paste0(unsign_genes$Gene[1], " (pvalue = ", round(unsign_genes$pval[1], 5), ")"))
 
 fig2 <- res_long %>% 
   ggplot(aes(x = expression, fill = group, color = group)) +
   geom_density(alpha = .3) +
   geom_point(data = res_long %>% filter(Gene == sign_genes$Gene[1]),
              aes(x = expression, y = 0, color = group), size = 3) +
-  ggtitle("Gene with a pval < 0.05")
+  ggtitle(paste0(sign_genes$Gene[1], " (pvalue = ", round(sign_genes$pval[1], 5), ")"))
 
 fig1 / fig2
 ```
@@ -649,12 +652,11 @@ res %>%
 
 
 
-[This xkcd cartoon](https://xkcd.com/882/) humorously illustrates the multiple 
-testing issue by depicting scientists testing whether eating jelly beans causes acne.
 
+```{r eval=FALSE, fig.align='center', fig.cap="Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/).", include=FALSE, purl=FALSE, results='markup'}
+#[This xkcd cartoon](https://xkcd.com/882/) humorously illustrates the multiple 
+#testing issue by depicting scientists testing whether eating jelly beans causes acne.
 
-
-```{r, results='markup', fig.cap="Do jelly beans cause acne? Scientists investigate. From [xkcd](https://xkcd.com/882/).", echo=FALSE, purl=FALSE, fig.align='center'}
 knitr::include_graphics("./fig/jellybeans.png")
 ```
 
@@ -663,7 +665,7 @@ knitr::include_graphics("./fig/jellybeans.png")
 Now, let's slightly modify our simulated expression data.
 
 In a typical RNA-seq experiment, we may test around 20,000 genes, but only a 
-fraction of them are usually truly differentially expressed. We could imagine 
+fraction of them are expected to be truly differentially expressed. We could imagine 
 a drug treatment that would modify the expression of about 1000 genes, but that 
 would have no impact on the other ones. 
 
@@ -678,11 +680,7 @@ exp_modified[1:1000, c("B1", "B2", "B3")] <- log(matrix(rnorm(1000*3, mean = 300
 exp_modified <- exp_modified %>% 
   mutate(DE = c(rep(TRUE, 1000), rep(FALSE, 19000)))
 
-exp_modified %>% 
-  pivot_longer(names_to = "sample", values_to = "expression", -c(Gene, DE)) %>% 
-  mutate(group = substr(sample, 1, 1)) %>% 
-  ggplot(aes(x = expression, fill = group, color = group)) + 
-  geom_density(alpha = .3)
+exp_modified
 ```
 
 Let's run a t-test on this new dataset:
@@ -705,7 +703,7 @@ table(res_modified$pval < 0.05)
 
 :::::::::::::::::::::::: solution
 
-```{r, fig.height=5, fig.width=15, message=FALSE, warning=FALSE}
+```{r echo=FALSE, fig.height=5, fig.width=15, message=FALSE, warning=FALSE}
 h1 <- res_modified %>% filter(DE) %>% 
   ggplot(aes(x = pval)) + 
   geom_histogram(binwidth = 0.05, boundary = 0) +
