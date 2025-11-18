@@ -7,14 +7,17 @@ exercises: 0
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How does PCA work?
-- What can PCA reveal from RNA-seq data?
+- What is a PCA?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- More details about several concepts that are used in this course
+- Understand why we use PCA 
+
+- Get an intuition for how it works
+
+- What can PCA reveal from RNA-seq data?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
