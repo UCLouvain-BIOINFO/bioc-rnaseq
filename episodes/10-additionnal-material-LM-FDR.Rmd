@@ -142,6 +142,10 @@ Assuming the expression values follow a normal distribution (even though,
 as we’ll see later, this isn’t actually true!) and let's use the `lm()` function 
 to fit a linear model to compare infected mice to non-infected mice.
 
+In this case the design of our experiment would be :
+
+$$design \sim  infection$$
+
 
 ```{r}
 mod1 <- lm(expression_log ~ infection, data = rna1)
@@ -197,7 +201,10 @@ and 3 treated samples for each cell type.
 
 
 To take into account the treatment effect while controlling the cell origin, 
-we can use the following linear model:
+we should use the following design: $$design \sim Treatment + Cell$$ 
+
+in the following linear model: 
+
 
 $$y = \beta_0 + \beta_1 . x_1 + \beta_2 . x_2$$
 
@@ -251,11 +258,9 @@ in the different samples:
 - In `treated cells B`: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$y$ = $\beta_0$ + *Treatment* + *Cell*
 
 
-::::::::::::::::::::::::::::::::::::: challenge
+### Example
 
-### Challenge: 
-
-Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
+Let's subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
 ```{r, eval=TRUE, purl=TRUE}
 rna2 <- rna %>% 
@@ -269,16 +274,61 @@ rna2$infection <- factor(rna2$infection, levels = c("NonInfected", "InfluenzaA")
 ```
 
 
-Use the `lm()` function to fit a linear model that would account for infection and sex.
+We will start by fitting a linear model that only accounts for the *infection* effect,
+ignoring the *sex* effect.
+
+Our design would hence be $$design \sim infection$$
+
+```{r}
+mod2 <- lm(expression_log ~ infection, data = rna2)
+summary(mod2)
+```
+
+The  *Infection Effect* is not significant.
+
+
+```{r , fig.height=5, fig.width=3}
+rna2 %>% 
+  ggplot(aes(x = infection, y = expression_log)) +
+  geom_jitter(size = 3, aes(color = sex)) +
+  geom_boxplot(alpha = 0) +
+  theme(legend.position = "bottom")
+
+```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Try to figure our what is wrong with this model
+
+:::::::::::::::::::::::: solution
+
+The model only accounts for the *infection* effect. It ignores the *sex* effect.
+
+Male and female values are mixed, even though they clearly don’t start at the same baseline.
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Use the `lm()` function to fit a linear model that would now account for infection and sex.
 
 Interprete the results.
 
 :::::::::::::::::::::::: solution
 
 ```{r}
-mod2 <- lm(expression_log ~ infection + sex, data = rna2)
-summary(mod2)
+mod3 <- lm(expression_log ~ infection + sex, data = rna2)
+summary(mod3)
 ```
+
+
 
 The coefficients `infectionInfluenzaA` (representing the *Infection Effect*) and
 the coefficient `sexMale`, representing the *Sex Effect*, are both significant.
@@ -293,42 +343,16 @@ rna2 %>%
   theme(legend.position = "bottom")
 ```
 
+The model now adjusts for the baseline difference between males and females.
+
+It prevents sex differences from biasing the infection effect.
 
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: challenge
-
-### Challenge: 
-
-Re-use the `lm()` function to fit a linear model that would only account for infection.
-
-Compare with the previous model and try to interprete the difference.
-
-:::::::::::::::::::::::: solution
-
-```{r}
-mod3 <- lm(expression_log ~ infection, data = rna2)
-summary(mod3)
-```
-
-The  *Infection Effect* is not significant anymore.
-
-
-```{r , fig.height=5, fig.width=3}
-rna2 %>% 
-  ggplot(aes(x = infection, y = expression_log)) +
-  geom_jitter(size = 3, aes(color = sex)) +
-  geom_boxplot(alpha = 0) +
-  theme(legend.position = "bottom")
-
-```
 
 
 
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Design with interaction
 
@@ -336,6 +360,9 @@ Coming back to the previous experimental design were we considered 3 controls
 and 3 treated samples for each cell type (cells A and cells B). 
 An interaction term could be added to the linear model, to modelise a 
 treatment effect that would differ across the cell types.
+
+Our design would hence be :
+$$design \sim Treatment*Cell$$
 
 The linear model could be written 
 
