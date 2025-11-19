@@ -379,23 +379,24 @@ information when reducing the number of dimensions (above, from 2
 (plane) to 1 (line)). In the first example above (left), we lose all the
 measurements of gene <em>y</em>. In the second example (right), we lose
 all the measurements of gene <em>x</em>.</p>
-<p><strong>=&gt; The goal of dimensionality reduction is to limit this
+<p><strong>The goal of dimensionality reduction is to limit this
 loss.</strong></p>
-<p>We know already about <strong>linear regression</strong>. Below, we
-use the <code>lm</code> function to regress <em>y</em> onto <em>x</em>
-(left) and <em>x</em> onto <em>y</em> (right). These regression lines
-give us an approximate linear relationship between the expression of
-genes <em>x</em> and <em>y</em>. The relationship differs depending on
-the gene we choose to be the predictor or the response.</p>
+<p>Instead of projecting the points on the x or the y axis, we could
+think about a linear regression. We could use the lm() to predict the
+value of gene_y, based on the expression on gene_x, or to predict the
+value of gene_x, based on the expression on gene_y.</p>
+<p>But the relationship differs depending on the gene we choose to be
+the predictor or the response.</p>
 <figure style="text-align: center"><img src="../fig/11-Additional-material-PCA-rendered-linreg-1.png" alt="Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (green)." class="figure mx-auto d-block"><figcaption>
 Regression of y onto x (left) minimisises the sums of squares of
 vertical residuals (red). Regression of x onto y (right) minimisises the
 sums of squares of horizontal residuals (green).
-</figcaption></figure><p>We now want a line that best fits the cloud of points in all
-directions. This line would be the axis that minimises distances in both
-directions, minimising the sum of squares of the orthogonal projections.
-By definition, this line is also the one that maximises the variance of
-the projections, and hence the one that captures the maximum of
+</figcaption></figure><p>Another option would be to put both genes on equal footing and find
+the axis that best fits the cloud of points in all directions. This line
+would be the axis that minimises distances in both directions,
+minimising the sum of squares of the orthogonal projections.</p>
+<p>By definition, this line is also the one that maximises the variance
+of the projections, and hence the one that captures the maximum of
 variability. This line is called <strong>first principal component
 (PC1)</strong>.</p>
 <p>The <strong>second principal component (PC2)</strong> is then chosen
@@ -577,7 +578,8 @@ genes:</p>
 <p><span class="math display">\[ PC1 = c_{1}.Gene_{A} + c_{2}.Gene_{B} +
 c_{3}.Gene_{C} + c_{4}.Gene_{D} + c_{5}.Gene_{E}\]</span></p>
 <p>The coefficients <span class="math inline">\(c_1\)</span>, <span class="math inline">\(c_2\)</span>, <span class="math inline">\(c_3\)</span>, <span class="math inline">\(c_4\)</span>, and <span class="math inline">\(c_5\)</span>, also called
-<strong>loadings</strong>, represent the weight of each gene in PC1.</p>
+<strong>loadings</strong>, represent the <strong>weight</strong> of each
+gene in PC1.</p>
 <p>Loadings are stored in the <code>rotation</code> slot of the prcomp
 output. Genes with the largest absolute PC1 loadings are the ones that
 contribute most to that component (GeneB, GeneC and GeneE in this
