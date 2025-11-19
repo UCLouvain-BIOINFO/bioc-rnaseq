@@ -135,6 +135,10 @@ Assuming the expression values follow a normal distribution (even though,
 as we’ll see later, this isn’t actually true!) and let's use the `lm()` function 
 to fit a linear model to compare infected mice to non-infected mice.
 
+In this case the design of our experiment would be :
+
+$$design \sim  infection$$
+
 
 
 ``` r
@@ -226,7 +230,10 @@ and 3 treated samples for each cell type.
 
 
 To take into account the treatment effect while controlling the cell origin, 
-we can use the following linear model:
+we should use the following design: $$design \sim Treatment + Cell$$ 
+
+in the following linear model: 
+
 
 $$y = \beta_0 + \beta_1 . x_1 + \beta_2 . x_2$$
 
@@ -275,11 +282,9 @@ in the different samples:
 - In `treated cells B`: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$y$ = $\beta_0$ + *Treatment* + *Cell*
 
 
-::::::::::::::::::::::::::::::::::::: challenge
+### Example
 
-### Challenge: 
-
-Subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
+Let's subset the rna dataset as below to keep only on the gene *Ddx3x*, and mice at time 0 and 8.
 
 
 ``` r
@@ -294,7 +299,74 @@ rna2$infection <- factor(rna2$infection, levels = c("NonInfected", "InfluenzaA")
 ```
 
 
-Use the `lm()` function to fit a linear model that would account for infection and sex.
+We will start by fitting a linear model that only accounts for the *infection* effect,
+ignoring the *sex* effect.
+
+Our design would hence be $$design \sim infection$$
+
+
+``` r
+mod2 <- lm(expression_log ~ infection, data = rna2)
+summary(mod2)
+```
+
+``` output
+
+Call:
+lm(formula = expression_log ~ infection, data = rna2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.20156 -0.15940  0.02542  0.14115  0.19720 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)          9.94523    0.06150 161.710   <2e-16 ***
+infectionInfluenzaA  0.15182    0.08697   1.746    0.106    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1627 on 12 degrees of freedom
+Multiple R-squared:  0.2025,	Adjusted R-squared:  0.136 
+F-statistic: 3.047 on 1 and 12 DF,  p-value: 0.1064
+```
+
+The  *Infection Effect* is not significant.
+
+
+
+``` r
+rna2 %>% 
+  ggplot(aes(x = infection, y = expression_log)) +
+  geom_jitter(size = 3, aes(color = sex)) +
+  geom_boxplot(alpha = 0) +
+  theme(legend.position = "bottom")
+```
+
+<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Try to figure our what is wrong with this model
+
+:::::::::::::::::::::::: solution
+
+The model only accounts for the *infection* effect. It ignores the *sex* effect.
+
+Male and female values are mixed, even though they clearly don’t start at the same baseline.
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+### Challenge: 
+
+Use the `lm()` function to fit a linear model that would now account for infection and sex.
 
 Interprete the results.
 
@@ -302,8 +374,8 @@ Interprete the results.
 
 
 ``` r
-mod2 <- lm(expression_log ~ infection + sex, data = rna2)
-summary(mod2)
+mod3 <- lm(expression_log ~ infection + sex, data = rna2)
+summary(mod3)
 ```
 
 ``` output
@@ -328,6 +400,8 @@ Multiple R-squared:  0.8906,	Adjusted R-squared:  0.8707
 F-statistic: 44.79 on 2 and 11 DF,  p-value: 5.175e-06
 ```
 
+
+
 The coefficients `infectionInfluenzaA` (representing the *Infection Effect*) and
 the coefficient `sexMale`, representing the *Sex Effect*, are both significant.
 
@@ -342,68 +416,18 @@ rna2 %>%
   theme(legend.position = "bottom")
 ```
 
-<img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
-
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge
-
-### Challenge: 
-
-Re-use the `lm()` function to fit a linear model that would only account for infection.
-
-Compare with the previous model and try to interprete the difference.
-
-:::::::::::::::::::::::: solution
-
-
-``` r
-mod3 <- lm(expression_log ~ infection, data = rna2)
-summary(mod3)
-```
-
-``` output
-
-Call:
-lm(formula = expression_log ~ infection, data = rna2)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--0.20156 -0.15940  0.02542  0.14115  0.19720 
-
-Coefficients:
-                    Estimate Std. Error t value Pr(>|t|)    
-(Intercept)          9.94523    0.06150 161.710   <2e-16 ***
-infectionInfluenzaA  0.15182    0.08697   1.746    0.106    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.1627 on 12 degrees of freedom
-Multiple R-squared:  0.2025,	Adjusted R-squared:  0.136 
-F-statistic: 3.047 on 1 and 12 DF,  p-value: 0.1064
-```
-
-The  *Infection Effect* is not significant anymore.
-
-
-
-``` r
-rna2 %>% 
-  ggplot(aes(x = infection, y = expression_log)) +
-  geom_jitter(size = 3, aes(color = sex)) +
-  geom_boxplot(alpha = 0) +
-  theme(legend.position = "bottom")
-```
-
 <img src="fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
+The model now adjusts for the baseline difference between males and females.
 
-
+It prevents sex differences from biasing the infection effect.
 
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
 
 ## Design with interaction
 
@@ -411,6 +435,9 @@ Coming back to the previous experimental design were we considered 3 controls
 and 3 treated samples for each cell type (cells A and cells B). 
 An interaction term could be added to the linear model, to modelise a 
 treatment effect that would differ across the cell types.
+
+Our design would hence be :
+$$design \sim Treatment*Cell$$
 
 The linear model could be written 
 
@@ -836,16 +863,16 @@ exp_modified
 # A tibble: 20,000 × 8
    Gene      A1    A2    A3    B1    B2    B3 DE   
    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>
- 1 Gene1   4.72  4.89  4.51  5.68  5.74  5.68 TRUE 
- 2 Gene2   4.61  4.96  4.58  5.67  5.58  5.88 TRUE 
- 3 Gene3   4.75  4.70  4.75  5.72  5.64  5.70 TRUE 
- 4 Gene4   4.83  4.83  4.43  5.80  5.61  5.83 TRUE 
- 5 Gene5   4.68  4.33  4.84  5.70  5.67  5.67 TRUE 
- 6 Gene6   4.57  4.74  4.68  5.58  5.76  5.73 TRUE 
- 7 Gene7   4.68  4.47  4.50  5.66  5.62  5.65 TRUE 
- 8 Gene8   4.59  4.81  4.44  5.66  5.80  5.68 TRUE 
- 9 Gene9   4.53  4.84  4.51  5.80  5.63  5.82 TRUE 
-10 Gene10  4.74  4.09  4.61  5.63  5.70  5.55 TRUE 
+ 1 Gene1   4.72  4.89  4.51  5.59  5.78  5.71 TRUE 
+ 2 Gene2   4.61  4.96  4.58  5.73  5.76  5.73 TRUE 
+ 3 Gene3   4.75  4.70  4.75  5.76  5.78  5.73 TRUE 
+ 4 Gene4   4.83  4.83  4.43  5.64  5.66  5.75 TRUE 
+ 5 Gene5   4.68  4.33  4.84  5.68  5.69  5.69 TRUE 
+ 6 Gene6   4.57  4.74  4.68  5.63  5.79  5.84 TRUE 
+ 7 Gene7   4.68  4.47  4.50  5.68  5.74  5.74 TRUE 
+ 8 Gene8   4.59  4.81  4.44  5.78  5.68  5.74 TRUE 
+ 9 Gene9   4.53  4.84  4.51  5.72  5.69  5.56 TRUE 
+10 Gene10  4.74  4.09  4.61  5.72  5.76  5.73 TRUE 
 # ℹ 19,990 more rows
 ```
 
@@ -907,11 +934,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1052
-    TRUE      0   833
+    FALSE 18115  1055
+    TRUE      0   830
 ```
 
-Only 833 were found to be significant after FDR correction.
+Only 830 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
