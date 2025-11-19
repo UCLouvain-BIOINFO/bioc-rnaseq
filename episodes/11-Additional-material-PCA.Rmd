@@ -40,7 +40,8 @@ minimising the loss of information.
 
 We are going to use a small dataset to illustrate some important concepts 
 related to PCA. This dataset represents the measurement of genes *x* and *y* in 
-20 samples. We will be using the scaled and centered version of this dataset.
+20 samples. We will be using the scaled and centered version of this dataset, 
+to place the 2 genes on the same scale.
 
 ```{r xyplot, echo=FALSE, fig.cap="Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples", fig.height=5, fig.width=11, message=FALSE, warning=FALSE}
 
@@ -122,7 +123,7 @@ relationship differs depending on the gene we choose to be the
 predictor or the response.
 
 
-```{r linreg, echo = FALSE, fig.cap = "Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange).", fig.width = 5, fig.width = 11}
+```{r linreg, echo = FALSE, fig.cap = "Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (green).", fig.width = 5, fig.width = 11}
 reg1 <- lm(gene_y ~ gene_x, data = xy)
 a1 <- reg1$coefficients[1] # intercept
 b1 <- reg1$coefficients[2] # slope
@@ -150,10 +151,11 @@ pline2 <- p +
 pline1 + pline2
 ```
 
-We now want a line that minimises distances in both directions, as
-shown below. This line, called **first principal component (PC1)**, 
-minimises the sum of squares of the orthogonal projections.
-It is also the one that maximises the variance of the projections along itself.
+We now want a line that best fits the cloud of points in all directions. This
+line would be the axis that minimises distances in both directions, minimising
+the sum of squares of the orthogonal projections. By definition, this line is
+also the one that maximises the variance of the projections, and hence the one
+that captures the maximum of variability. This line is called **first principal component (PC1)**.
 
 The **second principal component (PC2)** is then chosen to be orthogonal to the
 first one. In this case, there is only one possibility.
