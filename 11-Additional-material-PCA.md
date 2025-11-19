@@ -7,14 +7,17 @@ exercises: 0
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How does PCA work?
-- What can PCA reveal from RNA-seq data?
+- What is a PCA?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- More details about several concepts that are used in this course
+- Understand why we use PCA 
+
+- Get an intuition for how it works
+
+- What can PCA reveal from RNA-seq data?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -32,7 +35,8 @@ minimising the loss of information.
 
 We are going to use a small dataset to illustrate some important concepts 
 related to PCA. This dataset represents the measurement of genes *x* and *y* in 
-20 samples. We will be using the scaled and centered version of this dataset.
+20 samples. We will be using the scaled and centered version of this dataset, 
+to place the 2 genes on the same scale.
 
 <div class="figure" style="text-align: center">
 <img src="fig/11-Additional-material-PCA-rendered-xyplot-1.png" alt="Raw (left) and scale/centred (right) expression data for genes *x* and *y* in 20 samples"  />
@@ -70,14 +74,15 @@ predictor or the response.
 
 
 <div class="figure" style="text-align: center">
-<img src="fig/11-Additional-material-PCA-rendered-linreg-1.png" alt="Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange)."  />
-<p class="caption">Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (orange).</p>
+<img src="fig/11-Additional-material-PCA-rendered-linreg-1.png" alt="Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (green)."  />
+<p class="caption">Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (green).</p>
 </div>
 
-We now want a line that minimises distances in both directions, as
-shown below. This line, called **first principal component (PC1)**, 
-minimises the sum of squares of the orthogonal projections.
-It is also the one that maximises the variance of the projections along itself.
+We now want a line that best fits the cloud of points in all directions. This
+line would be the axis that minimises distances in both directions, minimising
+the sum of squares of the orthogonal projections. By definition, this line is
+also the one that maximises the variance of the projections, and hence the one
+that captures the maximum of variability. This line is called **first principal component (PC1)**.
 
 The **second principal component (PC2)** is then chosen to be orthogonal to the
 first one. In this case, there is only one possibility.
