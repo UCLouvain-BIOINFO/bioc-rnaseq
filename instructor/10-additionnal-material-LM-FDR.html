@@ -305,7 +305,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Additional material: Linear models and FDR</h1>
-        <p> Last updated on 2025-11-17 |
+        <p> Last updated on 2025-11-19 |
 
         <a href="https://github.com/carpentries-incubator/bioc-rnaseq/edit/main/episodes/10-additionnal-material-LM-FDR.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -440,6 +440,8 @@ level.</p>
 though, as we’ll see later, this isn’t actually true!) and let’s use the
 <code>lm()</code> function to fit a linear model to compare infected
 mice to non-infected mice.</p>
+<p>In this case the design of our experiment would be :</p>
+<p><span class="math display">\[design \sim  infection\]</span></p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -526,7 +528,8 @@ expression values of 6 control and 6 treated samples, but the experiment
 was conducted in 2 different cell types (cells A and cells B). We hence
 have 3 controls and 3 treated samples for each cell type.</p>
 <p>To take into account the treatment effect while controlling the cell
-origin, we can use the following linear model:</p>
+origin, we should use the following design: <span class="math display">\[design \sim Treatment + Cell\]</span></p>
+<p>in the following linear model:</p>
 <p><span class="math display">\[y = \beta_0 + \beta_1 . x_1 + \beta_2 .
 x_2\]</span></p>
 <p>We could rewrite this equation as:</p>
@@ -566,15 +569,9 @@ modelised in the different samples:</p>
 <li><p>In <code>untreated cells B</code>:          <span class="math inline">\(y\)</span> = <span class="math inline">\(\beta_0\)</span> + <em>Cell</em></p></li>
 <li><p>In <code>treated cells B</code>:              <span class="math inline">\(y\)</span> = <span class="math inline">\(\beta_0\)</span> + <em>Treatment</em> +
 <em>Cell</em></p></li>
-</ul><div id="challenge" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<span class="callout-header">Challenge</span>
-<div id="challenge" class="callout-inner">
-<h3 class="callout-title">Challenge:</h3>
-<div class="callout-content">
-<p>Subset the rna dataset as below to keep only on the gene
+</ul><div class="section level3">
+<h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a></h3>
+<p>Let’s subset the rna dataset as below to keep only on the gene
 <em>Ddx3x</em>, and mice at time 0 and 8.</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -589,9 +586,59 @@ modelised in the different samples:</p>
 <span><span class="co">#set the `NonInfected` condition as the reference level. </span></span>
 <span><span class="va">rna2</span><span class="op">$</span><span class="va">infection</span> <span class="op">&lt;-</span> <span class="fu">factor</span><span class="op">(</span><span class="va">rna2</span><span class="op">$</span><span class="va">infection</span>, levels <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"NonInfected"</span>, <span class="st">"InfluenzaA"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Use the <code>lm()</code> function to fit a linear model that would
-account for infection and sex.</p>
-<p>Interprete the results.</p>
+<p>We will start by fitting a linear model that only accounts for the
+<em>infection</em> effect, ignoring the <em>sex</em> effect.</p>
+<p>Our design would hence be <span class="math display">\[design \sim
+infection\]</span></p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu">lm</span><span class="op">(</span><span class="va">expression_log</span> <span class="op">~</span> <span class="va">infection</span>, data <span class="op">=</span> <span class="va">rna2</span><span class="op">)</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>
+Call:
+lm(formula = expression_log ~ infection, data = rna2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-0.20156 -0.15940  0.02542  0.14115  0.19720
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)          9.94523    0.06150 161.710   &lt;2e-16 ***
+infectionInfluenzaA  0.15182    0.08697   1.746    0.106
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.1627 on 12 degrees of freedom
+Multiple R-squared:  0.2025,	Adjusted R-squared:  0.136
+F-statistic: 3.047 on 1 and 12 DF,  p-value: 0.1064</code></pre>
+</div>
+<p>The <em>Infection Effect</em> is not significant.</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rna2</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">infection</span>, y <span class="op">=</span> <span class="va">expression_log</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_jitter</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, <span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_boxplot</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge" class="callout-inner">
+<h3 class="callout-title">Challenge:</h3>
+<div class="callout-content">
+<p>Try to figure our what is wrong with this model</p>
 </div>
 </div>
 </div>
@@ -602,12 +649,41 @@ account for infection and sex.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb10">
+<p>The model only accounts for the <em>infection</em> effect. It ignores
+the <em>sex</em> effect.</p>
+<p>Male and female values are mixed, even though they clearly don’t
+start at the same baseline.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="challenge-1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-1" class="callout-inner">
+<h3 class="callout-title">Challenge:</h3>
+<div class="callout-content">
+<p>Use the <code>lm()</code> function to fit a linear model that would
+now account for infection and sex.</p>
+<p>Interprete the results.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu">lm</span><span class="op">(</span><span class="va">expression_log</span> <span class="op">~</span> <span class="va">infection</span> <span class="op">+</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">rna2</span><span class="op">)</span></span>
-<span><span class="fu">summary</span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu">lm</span><span class="op">(</span><span class="va">expression_log</span> <span class="op">~</span> <span class="va">infection</span> <span class="op">+</span> <span class="va">sex</span>, data <span class="op">=</span> <span class="va">rna2</span><span class="op">)</span></span>
+<span><span class="fu">summary</span><span class="op">(</span><span class="va">mod3</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -635,7 +711,7 @@ F-statistic: 44.79 on 2 and 11 DF,  p-value: 5.175e-06</code></pre>
 <p>The coefficients <code>infectionInfluenzaA</code> (representing the
 <em>Infection Effect</em>) and the coefficient <code>sexMale</code>,
 representing the <em>Sex Effect</em>, are both significant.</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -646,73 +722,11 @@ representing the <em>Sex Effect</em>, are both significant.</p>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">sex</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="../fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The model now adjusts for the baseline difference between males and
+females.</p>
+<p>It prevents sex differences from biasing the infection effect.</p>
 </div>
 </div>
-</div>
-<div id="challenge-1" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<span class="callout-header">Challenge</span>
-<div id="challenge-1" class="callout-inner">
-<h3 class="callout-title">Challenge:</h3>
-<div class="callout-content">
-<p>Re-use the <code>lm()</code> function to fit a linear model that
-would only account for infection.</p>
-<p>Compare with the previous model and try to interprete the
-difference.</p>
-</div>
-</div>
-</div>
-<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
-</button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu">lm</span><span class="op">(</span><span class="va">expression_log</span> <span class="op">~</span> <span class="va">infection</span>, data <span class="op">=</span> <span class="va">rna2</span><span class="op">)</span></span>
-<span><span class="fu">summary</span><span class="op">(</span><span class="va">mod3</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>
-Call:
-lm(formula = expression_log ~ infection, data = rna2)
-
-Residuals:
-     Min       1Q   Median       3Q      Max
--0.20156 -0.15940  0.02542  0.14115  0.19720
-
-Coefficients:
-                    Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept)          9.94523    0.06150 161.710   &lt;2e-16 ***
-infectionInfluenzaA  0.15182    0.08697   1.746    0.106
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.1627 on 12 degrees of freedom
-Multiple R-squared:  0.2025,	Adjusted R-squared:  0.136
-F-statistic: 3.047 on 1 and 12 DF,  p-value: 0.1064</code></pre>
-</div>
-<p>The <em>Infection Effect</em> is not significant anymore.</p>
-<div class="codewrapper sourceCode" id="cb15">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rna2</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">infection</span>, y <span class="op">=</span> <span class="va">expression_log</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_jitter</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, <span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_boxplot</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre>
-</div>
-<figure><img src="../fig/10-additionnal-material-LM-FDR-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
@@ -723,6 +737,8 @@ F-statistic: 3.047 on 1 and 12 DF,  p-value: 0.1064</code></pre>
 controls and 3 treated samples for each cell type (cells A and cells B).
 An interaction term could be added to the linear model, to modelise a
 treatment effect that would differ across the cell types.</p>
+<p>Our design would hence be : <span class="math display">\[design \sim
+Treatment*Cell\]</span></p>
 <p>The linear model could be written</p>
 <p><span class="math display">\[y = \beta_0 + \beta_1 . x_1 + \beta_2 .
 x_2 + \beta_{12}.x_1.x_2.\]</span></p>
@@ -1170,16 +1186,16 @@ first 1,000 genes by increasing their expression values in group B.</p>
 <pre class="output" tabindex="0"><code># A tibble: 20,000 × 8
    Gene      A1    A2    A3    B1    B2    B3 DE
    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;
- 1 Gene1   4.72  4.89  4.51  5.68  5.74  5.68 TRUE
- 2 Gene2   4.61  4.96  4.58  5.67  5.58  5.88 TRUE
- 3 Gene3   4.75  4.70  4.75  5.72  5.64  5.70 TRUE
- 4 Gene4   4.83  4.83  4.43  5.80  5.61  5.83 TRUE
- 5 Gene5   4.68  4.33  4.84  5.70  5.67  5.67 TRUE
- 6 Gene6   4.57  4.74  4.68  5.58  5.76  5.73 TRUE
- 7 Gene7   4.68  4.47  4.50  5.66  5.62  5.65 TRUE
- 8 Gene8   4.59  4.81  4.44  5.66  5.80  5.68 TRUE
- 9 Gene9   4.53  4.84  4.51  5.80  5.63  5.82 TRUE
-10 Gene10  4.74  4.09  4.61  5.63  5.70  5.55 TRUE
+ 1 Gene1   4.72  4.89  4.51  5.59  5.78  5.71 TRUE
+ 2 Gene2   4.61  4.96  4.58  5.73  5.76  5.73 TRUE
+ 3 Gene3   4.75  4.70  4.75  5.76  5.78  5.73 TRUE
+ 4 Gene4   4.83  4.83  4.43  5.64  5.66  5.75 TRUE
+ 5 Gene5   4.68  4.33  4.84  5.68  5.69  5.69 TRUE
+ 6 Gene6   4.57  4.74  4.68  5.63  5.79  5.84 TRUE
+ 7 Gene7   4.68  4.47  4.50  5.68  5.74  5.74 TRUE
+ 8 Gene8   4.59  4.81  4.44  5.78  5.68  5.74 TRUE
+ 9 Gene9   4.53  4.84  4.51  5.72  5.69  5.56 TRUE
+10 Gene10  4.74  4.09  4.61  5.72  5.76  5.73 TRUE
 # ℹ 19,990 more rows</code></pre>
 </div>
 <p>Let’s run a t-test on this new dataset:</p>
@@ -1253,10 +1269,10 @@ pvalues.</p>
 </h3>
 <pre class="output" tabindex="0"><code>         sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1052
-    TRUE      0   833</code></pre>
+    FALSE 18115  1055
+    TRUE      0   830</code></pre>
 </div>
-<p>Only 833 were found to be significant after FDR correction.</p>
+<p>Only 830 were found to be significant after FDR correction.</p>
 <div id="challenge-6" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -1368,7 +1384,7 @@ FALSE  TRUE
   "url": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/10-additionnal-material-LM-FDR.html",
   "identifier": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/instructor/10-additionnal-material-LM-FDR.html",
   "dateCreated": "2020-09-15",
-  "dateModified": "2025-11-17",
+  "dateModified": "2025-11-19",
   "datePublished": "2025-11-19"
 }
 
