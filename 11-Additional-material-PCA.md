@@ -63,13 +63,11 @@ information when reducing the number of dimensions (above, from 2
 the measurements of gene *y*. In the second example (right), we lose
 all the measurements of gene *x*.
 
-**=> The goal of dimensionality reduction is to limit this loss.**
+**The goal of dimensionality reduction is to limit this loss.**
 
-We know already about **linear regression**. Below, we use the `lm`
-function to regress *y* onto *x* (left) and *x* onto *y*
-(right). These regression lines give us an approximate linear
-relationship between the expression of genes *x* and *y*. The
-relationship differs depending on the gene we choose to be the
+Instead of projecting the points on the x or the y axis, we could think about a linear regression. We could use the lm() to predict the value of gene_y, based on the expression on gene_x, or to predict the value of gene_x, based on the expression on gene_y. 
+
+But the relationship differs depending on the gene we choose to be the
 predictor or the response.
 
 
@@ -78,14 +76,12 @@ predictor or the response.
 <p class="caption">Regression of y onto x (left) minimisises the sums of squares of vertical residuals (red). Regression of x onto y (right) minimisises the sums of squares of horizontal residuals (green).</p>
 </div>
 
-We now want a line that best fits the cloud of points in all directions. This
-line would be the axis that minimises distances in both directions, minimising
-the sum of squares of the orthogonal projections. By definition, this line is
-also the one that maximises the variance of the projections, and hence the one
-that captures the maximum of variability. This line is called **first principal component (PC1)**.
+Another option would be to put both genes on equal footing and find the axis that best fits the cloud of points in all directions. This line would be the axis that minimises distances in both directions, minimising the sum of squares of the orthogonal projections. 
 
-The **second principal component (PC2)** is then chosen to be orthogonal to the
-first one. In this case, there is only one possibility.
+By definition, this line is also the one that maximises the variance of the projections, and hence the one that captures the maximum of variability.
+This line is called **first principal component (PC1)**.
+
+The **second principal component (PC2)** is then chosen to be orthogonal to the first one. In this case, there is only one possibility.
 
 <img src="fig/11-Additional-material-PCA-rendered-pxaex-1.png" style="display: block; margin: auto;" />
 
@@ -288,7 +284,7 @@ PC1 in the previous example is a linear combination of the 5 genes:
 $$ PC1 = c_{1}.Gene_{A} + c_{2}.Gene_{B} + c_{3}.Gene_{C} + c_{4}.Gene_{D} + c_{5}.Gene_{E}$$
 
 The coefficients $c_1$, $c_2$, $c_3$, $c_4$, and $c_5$, also called **loadings**, 
-represent the weight of each gene in PC1.
+represent the **weight** of each gene in PC1. 
 
 Loadings are stored in the `rotation` slot of the prcomp output. Genes with the 
 largest absolute PC1 loadings are the ones that contribute most to that component 
