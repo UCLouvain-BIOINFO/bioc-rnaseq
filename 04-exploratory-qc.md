@@ -481,7 +481,7 @@ loaded via a namespace (and not attached):
 [25] later_1.4.4             DelayedArray_0.34.1     BiocParallel_1.42.2    
 [28] parallel_4.5.3          cluster_2.1.8.1         R6_2.6.1               
 [31] bslib_0.9.0             limma_3.64.3            jquerylib_0.1.4        
-[34] Rcpp_1.1.0              iterators_1.0.14        knitr_1.50             
+[34] Rcpp_1.1.1-1.1          iterators_1.0.14        knitr_1.50             
 [37] httpuv_1.6.16           Matrix_1.7-4            splines_4.5.3          
 [40] igraph_2.2.1            tidyselect_1.2.1        abind_1.4-8            
 [43] yaml_2.3.10             doParallel_1.0.17       codetools_0.2-20       
@@ -489,7 +489,7 @@ loaded via a namespace (and not attached):
 [49] tibble_3.3.0            shiny_1.11.1            withr_3.0.2            
 [52] S7_0.2.0                evaluate_1.0.5          circlize_0.4.16        
 [55] pillar_1.11.1           affyio_1.78.0           BiocManager_1.30.26    
-[58] renv_1.2.1              DT_0.34.0               foreach_1.5.2          
+[58] renv_1.2.2              DT_0.34.0               foreach_1.5.2          
 [61] shinyjs_2.1.0           scales_1.4.0            xtable_1.8-4           
 [64] glue_1.8.0              tools_4.5.3             colourpicker_1.3.0     
 [67] locfit_1.5-9.12         colorspace_2.1-2        nlme_3.1-168           

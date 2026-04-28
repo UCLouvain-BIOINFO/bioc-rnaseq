@@ -863,16 +863,16 @@ exp_modified
 # A tibble: 20,000 × 8
    Gene      A1    A2    A3    B1    B2    B3 DE   
    <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <lgl>
- 1 Gene1   4.72  4.89  4.51  5.66  5.68  5.71 TRUE 
- 2 Gene2   4.61  4.96  4.58  5.70  5.64  5.67 TRUE 
- 3 Gene3   4.75  4.70  4.75  5.65  5.68  5.77 TRUE 
- 4 Gene4   4.83  4.83  4.43  5.74  5.71  5.67 TRUE 
- 5 Gene5   4.68  4.33  4.84  5.69  5.71  5.67 TRUE 
- 6 Gene6   4.57  4.74  4.68  5.78  5.72  5.64 TRUE 
- 7 Gene7   4.68  4.47  4.50  5.72  5.69  5.69 TRUE 
- 8 Gene8   4.59  4.81  4.44  5.71  5.55  5.67 TRUE 
- 9 Gene9   4.53  4.84  4.51  5.54  5.66  5.69 TRUE 
-10 Gene10  4.74  4.09  4.61  5.76  5.79  5.60 TRUE 
+ 1 Gene1   4.72  4.89  4.51  5.80  5.60  5.65 TRUE 
+ 2 Gene2   4.61  4.96  4.58  5.69  5.79  5.72 TRUE 
+ 3 Gene3   4.75  4.70  4.75  5.68  5.64  5.72 TRUE 
+ 4 Gene4   4.83  4.83  4.43  5.76  5.76  5.64 TRUE 
+ 5 Gene5   4.68  4.33  4.84  5.73  5.74  5.79 TRUE 
+ 6 Gene6   4.57  4.74  4.68  5.65  5.84  5.85 TRUE 
+ 7 Gene7   4.68  4.47  4.50  5.67  5.67  5.77 TRUE 
+ 8 Gene8   4.59  4.81  4.44  5.61  5.73  5.63 TRUE 
+ 9 Gene9   4.53  4.84  4.51  5.75  5.69  5.70 TRUE 
+10 Gene10  4.74  4.09  4.61  5.67  5.73  5.73 TRUE 
 # ℹ 19,990 more rows
 ```
 
@@ -934,11 +934,11 @@ table(sign_padj = res_modified$padj < 0.05, sign_pval = res_modified$pval < 0.05
 ``` output
          sign_pval
 sign_padj FALSE  TRUE
-    FALSE 18115  1057
-    TRUE      0   828
+    FALSE 18115  1062
+    TRUE      0   823
 ```
 
-Only 828 were found to be significant after FDR correction.
+Only 823 were found to be significant after FDR correction.
 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
