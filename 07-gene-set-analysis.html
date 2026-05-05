@@ -548,19 +548,19 @@ size of the <em>XY gene set</em> (i.e. the number of member genes),
 <span class="math inline">\(n_{1+}\)</span> is the number of DE genes,
 <span class="math inline">\(n\)</span> is the number of total genes.</p>
 <center>
-<table class="table"><thead><tr class="header"><th></th>
+<table class="table"><thead><tr><th></th>
 <th>In the gene set</th>
 <th>Not in the gene set</th>
 <th>Total</th>
-</tr></thead><tbody><tr class="odd"><td><strong>DE</strong></td>
+</tr></thead><tbody><tr><td><strong>DE</strong></td>
 <td><span class="math inline">\(n_{11}\)</span></td>
 <td><span class="math inline">\(n_{12}\)</span></td>
 <td><span class="math inline">\(n_{1+}\)</span></td>
-</tr><tr class="even"><td><strong>Not DE</strong></td>
+</tr><tr><td><strong>Not DE</strong></td>
 <td><span class="math inline">\(n_{21}\)</span></td>
 <td><span class="math inline">\(n_{22}\)</span></td>
 <td><span class="math inline">\(n_{2+}\)</span></td>
-</tr><tr class="odd"><td><strong>Total</strong></td>
+</tr><tr><td><strong>Total</strong></td>
 <td><span class="math inline">\(n_{+1}\)</span></td>
 <td><span class="math inline">\(n_{+2}\)</span></td>
 <td><span class="math inline">\(n\)</span></td>
@@ -605,19 +605,19 @@ size of the <em>XY gene set</em> (i.e. the number of member genes),
 </div>
 <p>And we fill these numbers into the 2x2 contingency table:</p>
 <center>
-<table class="table"><thead><tr class="header"><th></th>
+<table class="table"><thead><tr><th></th>
 <th>In the gene set</th>
 <th>Not in the gene set</th>
 <th>Total</th>
-</tr></thead><tbody><tr class="odd"><td><strong>DE</strong></td>
+</tr></thead><tbody><tr><td><strong>DE</strong></td>
 <td>13</td>
 <td>41</td>
 <td>54</td>
-</tr><tr class="even"><td><strong>Not DE</strong></td>
+</tr><tr><td><strong>Not DE</strong></td>
 <td>1121</td>
 <td>20023</td>
 <td>21144</td>
-</tr><tr class="odd"><td><strong>Total</strong></td>
+</tr><tr><td><strong>Total</strong></td>
 <td>1134</td>
 <td>20064</td>
 <td>21198</td>
@@ -691,19 +691,19 @@ over-representation of DE genes on the gene set.</p>
 the Fisher’s exact test. E.g. let’s put whether genes are in the gene
 sets on rows, and put whether genes are DE on columns.</p>
 <center>
-<table class="table"><thead><tr class="header"><th></th>
+<table class="table"><thead><tr><th></th>
 <th>DE</th>
 <th>Not DE</th>
 <th>Total</th>
-</tr></thead><tbody><tr class="odd"><td><strong>In the gene set</strong></td>
+</tr></thead><tbody><tr><td><strong>In the gene set</strong></td>
 <td>13</td>
 <td>1121</td>
 <td>1134</td>
-</tr><tr class="even"><td><strong>Not in the gene set</strong></td>
+</tr><tr><td><strong>Not in the gene set</strong></td>
 <td>41</td>
 <td>20023</td>
 <td>20064</td>
-</tr><tr class="odd"><td><strong>Total</strong></td>
+</tr><tr><td><strong>Total</strong></td>
 <td>54</td>
 <td>21144</td>
 <td>21198</td>
@@ -1100,43 +1100,43 @@ terms and genes are integrated in the Bioconductor standard packages:
 <em>the organism annotation packages</em>. In the current Bioconductor
 release, there are the following organism packages:</p>
 <center>
-<table class="table"><colgroup><col width="27%"><col width="25%"><col width="36%"><col width="10%"></colgroup><thead><tr class="header"><th>Package</th>
+<table class="table"><colgroup><col width="27%"><col width="25%"><col width="36%"><col width="10%"></colgroup><thead><tr><th>Package</th>
 <th>Organism</th>
 <th>Package</th>
 <th>Organism</th>
-</tr></thead><tbody><tr class="odd"><td>org.Hs.eg.db</td>
+</tr></thead><tbody><tr><td>org.Hs.eg.db</td>
 <td>Human</td>
 <td>org.Mm.eg.db</td>
 <td>Mouse</td>
-</tr><tr class="even"><td>org.Rn.eg.db</td>
+</tr><tr><td>org.Rn.eg.db</td>
 <td>Rat</td>
 <td>org.Dm.eg.db</td>
 <td>Fly</td>
-</tr><tr class="odd"><td>org.At.tair.db</td>
+</tr><tr><td>org.At.tair.db</td>
 <td>Arabidopsis</td>
 <td>org.Dr.eg.db</td>
 <td>Zebrafish</td>
-</tr><tr class="even"><td>org.Sc.sgd.db</td>
+</tr><tr><td>org.Sc.sgd.db</td>
 <td>Yeast</td>
 <td>org.Ce.eg.db</td>
 <td>Worm</td>
-</tr><tr class="odd"><td>org.Bt.eg.db</td>
+</tr><tr><td>org.Bt.eg.db</td>
 <td>Bovine</td>
 <td>org.Gg.eg.db</td>
 <td>Chicken</td>
-</tr><tr class="even"><td>org.Ss.eg.db</td>
+</tr><tr><td>org.Ss.eg.db</td>
 <td>Pig</td>
 <td>org.Mmu.eg.db</td>
 <td>Rhesus</td>
-</tr><tr class="odd"><td>org.Cf.eg.db</td>
+</tr><tr><td>org.Cf.eg.db</td>
 <td>Canine</td>
 <td>org.EcK12.eg.db</td>
 <td>E coli strain K12</td>
-</tr><tr class="even"><td>org.Xl.eg.db</td>
+</tr><tr><td>org.Xl.eg.db</td>
 <td>Xenopus</td>
 <td>org.Pt.eg.db</td>
 <td>Chimp</td>
-</tr><tr class="odd"><td>org.Ag.eg.db</td>
+</tr><tr><td>org.Ag.eg.db</td>
 <td>Anopheles</td>
 <td>org.EcSakai.eg.db</td>
 <td>E coli strain Sakai</td>
@@ -2130,19 +2130,19 @@ affects three values of <span class="math inline">\(n_{22}\)</span>,
 <span class="math inline">\(n_{02}\)</span> and <span class="math inline">\(n_{20}\)</span> more, which correspond to the
 non-DE genes or non-gene-set genes.</p>
 <center>
-<table class="table"><colgroup><col width="19%"><col width="28%"><col width="38%"><col width="13%"></colgroup><thead><tr class="header"><th></th>
+<table class="table"><colgroup><col width="19%"><col width="28%"><col width="38%"><col width="13%"></colgroup><thead><tr><th></th>
 <th>In the gene set</th>
 <th>Not in the gene set</th>
 <th>Total</th>
-</tr></thead><tbody><tr class="odd"><td><strong>DE</strong></td>
+</tr></thead><tbody><tr><td><strong>DE</strong></td>
 <td><span class="math inline">\(n_{11}\)</span></td>
 <td><span class="math inline">\(n_{12}\)</span></td>
 <td><span class="math inline">\(n_{1+}\)</span></td>
-</tr><tr class="even"><td><strong>Not DE</strong></td>
+</tr><tr><td><strong>Not DE</strong></td>
 <td><span class="math inline">\(n_{21}\)</span></td>
 <td><span class="math inline">\(\color{red}{n_{22}}\)</span></td>
 <td><span class="math inline">\(\color{red}{n_{2+}}\)</span></td>
-</tr><tr class="odd"><td><strong>Total</strong></td>
+</tr><tr><td><strong>Total</strong></td>
 <td><span class="math inline">\(n_{+1}\)</span></td>
 <td><span class="math inline">\(\color{red}{n_{+2}}\)</span></td>
 <td><span class="math inline">\(\color{red}{n}\)</span></td>
@@ -2658,7 +2658,7 @@ topological relations in the GO hierarchy.<a href="#fnref7" class="footnote-back
   "identifier": "https://UCLouvain-BIOINFO.github.io/bioc-rnaseq/07-gene-set-analysis.html",
   "dateCreated": "2020-09-15",
   "dateModified": "2026-04-28",
-  "datePublished": "2026-04-28"
+  "datePublished": "2026-05-05"
 }
 
   </script><script>
